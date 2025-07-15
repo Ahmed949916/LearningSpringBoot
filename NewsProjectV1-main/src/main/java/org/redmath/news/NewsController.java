@@ -1,5 +1,6 @@
 package org.redmath.news;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@Slf4j
 @RequestMapping("/api/news")
 public class NewsController {
     private final NewsService service;
@@ -35,6 +37,7 @@ public class NewsController {
     public Page<News> Find(@RequestParam String title, @RequestParam(defaultValue = "0") int page,
                            @RequestParam(defaultValue = "2") int size){
         Pageable pageable= PageRequest.of(page,size);
+        log.info("page={}",page);
         return service.find(title,pageable);
     }
 
