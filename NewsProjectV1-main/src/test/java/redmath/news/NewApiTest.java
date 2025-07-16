@@ -1,8 +1,10 @@
 package  redmath.news;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.redmath.Main;
+import org.redmath.news.News;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +21,8 @@ public class NewApiTest {
 
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Test
     public void testGetById () throws Exception {
@@ -33,4 +37,26 @@ public class NewApiTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.reportedAt", Matchers.notNullValue()));
 
     }
+
+    @Test
+    public void testGetAllNews() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/news"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_VALUE));
+
+    }
+    @Test
+    public void testUpdateNewsPartial() throws Exception {
+        News partialUpdate = new News();
+        partialUpdate.setTitle("Updated Title Only");
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/api/news/123")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(partialUpdate)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+    }
+
 }
