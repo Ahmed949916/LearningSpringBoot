@@ -59,4 +59,14 @@ public class NewApiTest {
 
     }
 
+    @Test
+    public void testDeleteNews_NotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/news/99999"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string("false"));
+    }
+
+
+
 }
