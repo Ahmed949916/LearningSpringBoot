@@ -9,6 +9,7 @@ databaseChangeLog:
               - column:
                   name: news_id
                   type: bigint
+                  autoIncrement: true
                   constraints:
                     nullable: false
               - column:

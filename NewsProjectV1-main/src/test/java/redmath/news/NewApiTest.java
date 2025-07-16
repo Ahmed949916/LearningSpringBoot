@@ -1,4 +1,4 @@
-package redmath.news;
+package  redmath.news;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;

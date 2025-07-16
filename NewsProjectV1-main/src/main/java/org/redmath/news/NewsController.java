@@ -4,10 +4,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 @RestController
 @Slf4j
@@ -37,35 +42,31 @@ public class NewsController {
     public Page<News> Find(@RequestParam String title, @RequestParam(defaultValue = "0") int page,
                            @RequestParam(defaultValue = "2") int size){
         Pageable pageable= PageRequest.of(page,size);
-        log.info("page={}",page);
         return service.find(title,pageable);
     }
 
-
-
     @PostMapping
-    public News create(@RequestBody News news){
-        System.out.println(news);
+    @ResponseStatus(HttpStatus.CREATED)
+    public News addNews(@RequestBody News news){
+        return service.create(news);
+    }
 
 
-        News fetched = null;
-        if (news.getId()!=null){
-            fetched= service.findNewsById(news.getId());
-        }
 
-
-      if(fetched==null){
-
-          return service.create(news);
-      }
-      else{
-          fetched.setAuthor(news.getAuthor());
-          fetched.setContent(news.getContent());
-          fetched.setTitle(news.getTitle());
-          return service.create(fetched);
-      }
-
-
+    @PatchMapping("/{id}")
+    public News updateNews(@PathVariable Long id, @RequestBody News news) {
+        return service.updateNews(id,news);
 
     }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String,String> handleNoSuchElementException(NoSuchElementException ex){
+        Map <String,String> errorResponse=new HashMap<>();
+        errorResponse.put("error", "Resource not found");
+        errorResponse.put("message", ex.getMessage());
+        return errorResponse;
+    }
+
+
 }

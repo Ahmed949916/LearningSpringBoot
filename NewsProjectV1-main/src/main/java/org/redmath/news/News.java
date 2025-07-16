@@ -1,5 +1,6 @@
 package org.redmath.news;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,7 @@ public class News {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "news_id")
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
 
     private String title;
