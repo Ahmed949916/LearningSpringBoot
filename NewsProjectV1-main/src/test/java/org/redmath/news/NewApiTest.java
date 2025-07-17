@@ -1,11 +1,10 @@
-package  redmath.news;
+package org.redmath.news;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.redmath.Main;
-import org.redmath.news.News;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -89,11 +88,12 @@ public class NewApiTest {
 
     }
     @Test
-    public void testUpdateNewsPartial() throws Exception {
+    public void testCreateAndUpdateNewsPartial() throws Exception {
+        Long createdId = createTestNews();
         News partialUpdate = new News();
         partialUpdate.setTitle("Updated Title Only");
 
-        mockMvc.perform(MockMvcRequestBuilders.patch("/api/news/123")
+        mockMvc.perform(MockMvcRequestBuilders.patch("/api/news/"+createdId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(partialUpdate)))
                 .andDo(MockMvcResultHandlers.print())
