@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: schema-0.0.2
+      author: users-setup
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+
+              - column:
+                  name: username
+                  type: VARCHAR(50)
+
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+
+              - column:
+                  name: role
+                  type: VARCHAR(50)
+
+        - addPrimaryKey:
+            tableName: users
+            columnNames: id
+            constraintName: users_pk
+
