@@ -18,5 +18,20 @@ databaseChangeLog:
               - column:
                   name: role
                   value: USER
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name:  id
+                  value: '2'
+              - column:
+                  name: username
+                  value:  admin
+              - column:
+                  name: password
+                  value: "{noop}admin"
+              - column:
+                  name: role
+                  value: ADMIN
 
 
