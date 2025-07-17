@@ -109,6 +109,17 @@ public class NewApiTest {
                 .andExpect(MockMvcResultMatchers.content().string("false"));
     }
 
+    @Test
+    public void testDeleteNews() throws Exception {
+
+        Long createdId = createTestNews();
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/news/"+createdId))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string("true"));
+    }
+
+
 
 
 
