@@ -14,7 +14,7 @@ databaseChangeLog:
                   value:  test
               - column:
                   name: password
-                  value: "{noop}test"
+                  value: "$2y$10$E/C8ugmARbioFlpGyWI/X.fD8fv4fDbVa8eFAzOXIItEXjoE9sxZW"
               - column:
                   name: role
                   value: USER
@@ -29,7 +29,7 @@ databaseChangeLog:
                   value:  admin
               - column:
                   name: password
-                  value: "{noop}admin"
+                  value: "$2y$10$yeMR7m8UOS9oSEJ8VUB2LOv9eL60B1EVgvd60Q6BMRvTVeU2JWIBW"
               - column:
                   name: role
                   value: ADMIN
