@@ -18,6 +18,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.time.LocalDateTime;
 
 import static org.springframework.http.RequestEntity.post;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -30,9 +32,12 @@ public class NewApiTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+
     @Test
     public void testGetById () throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/news/123"))
+        mockMvc
+        .perform(MockMvcRequestBuilders.get("/api/news/123")
+                .with(httpBasic("admin", "admin")))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -52,6 +57,8 @@ public class NewApiTest {
         news.setReportedAt(LocalDateTime.now());
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/news")
+                        .with(csrf())
+                        .with(httpBasic("admin", "admin"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(news)))
                 .andExpect(status().isCreated())
@@ -67,7 +74,9 @@ public class NewApiTest {
     public void testCreateAndGetById() throws Exception {
         Long createdId = createTestNews();
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/news/" + createdId))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/news/" + createdId)
+                .with(csrf())
+                .with(httpBasic("admin", "admin")))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -81,7 +90,8 @@ public class NewApiTest {
 
     @Test
     public void testGetAllNews() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/news"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/news")
+                .with(httpBasic("admin", "admin")))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_VALUE));
@@ -94,6 +104,8 @@ public class NewApiTest {
         partialUpdate.setTitle("Updated Title Only");
 
         mockMvc.perform(MockMvcRequestBuilders.patch("/api/news/"+createdId)
+                        .with(csrf())
+                        .with(httpBasic("admin", "admin"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(partialUpdate)))
                 .andDo(MockMvcResultHandlers.print())
@@ -104,7 +116,9 @@ public class NewApiTest {
 
     @Test
     public void testDeleteNews_NotFound() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/news/9999"))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/news/9999")
+                .with(csrf())
+                .with(httpBasic("admin", "admin")))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string("false"));
@@ -114,7 +128,9 @@ public class NewApiTest {
     public void testDeleteNews() throws Exception {
 
         Long createdId = createTestNews();
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/news/"+createdId))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/news/"+createdId)
+                .with(csrf())
+                .with(httpBasic("admin", "admin")))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string("true"));
