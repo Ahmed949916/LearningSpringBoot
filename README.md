@@ -17,7 +17,7 @@ A simple Spring Boot project created to learn and explore **Spring Boot features
 - **Java 17+**  
 - **Spring Boot 3.x**  
 - **Maven**  
-- **H2  
+- **H2**
 - **JUnit 5**  
 
  
