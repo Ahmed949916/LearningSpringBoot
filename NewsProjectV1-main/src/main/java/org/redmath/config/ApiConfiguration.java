@@ -21,7 +21,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
@@ -73,7 +75,10 @@ public class ApiConfiguration {
                             .subject(auth.getName())
                             .issuedAt(Instant.now())
                             .expiresAt(Instant.now().plusSeconds(expirySeconds))
-                            .claim("roles",auth.getAuthorities())
+                            .claim("roles", auth.getAuthorities().stream()
+                                    .map(a -> a.getAuthority())
+                                    .toList()
+                            )
                             .build();
 
                     var jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build();
@@ -86,14 +91,24 @@ public class ApiConfiguration {
                     response.setContentType("application/json");
                     response.getWriter().print(jsonResponse+auth.getAuthorities());
                 }))
-                .oauth2ResourceServer(config -> config.jwt(jwtConfig -> jwtConfig.jwtAuthenticationConverter(jwt -> {
-                    UserDetails user = userService.loadUserByUsername(jwt.getSubject());
-                    return new JwtAuthenticationToken(jwt, user.getAuthorities());
-                })));
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt
+                        .jwtAuthenticationConverter(jwtAuthenticationConverter())
+                ));
+
 
 
         return http.build();
     }
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        grantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
+        grantedAuthoritiesConverter.setAuthorityPrefix("");
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
+        return converter;
+    }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
