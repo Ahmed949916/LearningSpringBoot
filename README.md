@@ -7,7 +7,7 @@ A simple Spring Boot project created to learn and explore **Spring Boot features
 ## ✅ Features
 - Spring Boot auto-configuration  
 - RESTful APIs with Spring Web  
-- Database integration with Spring Data JPA (optional)  
+- Database integration with Spring Data JPA  
 - Basic unit & integration tests  
 - Actuator for monitoring  
 
