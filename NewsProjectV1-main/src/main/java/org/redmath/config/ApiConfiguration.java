@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 
+import org.redmath.user.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,10 +16,12 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
@@ -48,7 +51,7 @@ public class ApiConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtEncoder jwtEncoder) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, UserService userService, JwtEncoder jwtEncoder) throws Exception {
 
         http
                 .csrf(csrf -> csrf
@@ -70,20 +73,24 @@ public class ApiConfiguration {
                             .subject(auth.getName())
                             .issuedAt(Instant.now())
                             .expiresAt(Instant.now().plusSeconds(expirySeconds))
-                            .claim("roles", auth.getAuthorities())
+                            .claim("roles",auth.getAuthorities())
                             .build();
 
                     var jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build();
                     String token = jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
 
                     String jsonResponse = String.format(
-                            "{\"token_type\":\"Bearer\",\"access_token\":\"%s\",\"expires_in\":%d}",
+                            "{\"token_type\":\"Bearer\",\"access_token\":\"%s\",\"expires_in\":%d }",
                             token, expirySeconds
                     );
                     response.setContentType("application/json");
-                    response.getWriter().print(jsonResponse);
+                    response.getWriter().print(jsonResponse+auth.getAuthorities());
                 }))
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
+                .oauth2ResourceServer(config -> config.jwt(jwtConfig -> jwtConfig.jwtAuthenticationConverter(jwt -> {
+                    UserDetails user = userService.loadUserByUsername(jwt.getSubject());
+                    return new JwtAuthenticationToken(jwt, user.getAuthorities());
+                })));
+
 
         return http.build();
     }
