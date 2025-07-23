@@ -50,4 +50,7 @@ public class TaskService {
     }
 
 
+    public Task findById(Long id) {
+        return taskRepository.findById(id).orElseThrow();
+    }
 }
