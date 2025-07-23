@@ -38,20 +38,16 @@ public class TaskService {
     }
 
 
-    public Task updateTask(Task task) {
+    public Task updateTask(Long id, Task req) {
+        Task existingTask = taskRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Task not found"));
 
-        Task existingTask = taskRepository.findById(task.getId())
-                .orElseThrow(() -> new NoSuchElementException("Task with ID " + task.getId() + " not found"));
-        if (task.getTitle() != null && !task.getTitle().isBlank()) {
-            existingTask.setTitle(task.getTitle());
-        }
-        if (task.getDescription() != null && !task.getDescription().isBlank()) {
-            existingTask.setDescription(task.getDescription());
-        }
-        if (task.getOwner() != null) {
-            existingTask.setOwner(task.getOwner());
-        }
+        if (req.getTitle() != null) existingTask.setTitle(req.getTitle());
+        if (req.getDescription() != null) existingTask.setDescription(req.getDescription());
+        if (req.getOwnerId() != null) existingTask.setOwnerId(req.getOwnerId());
+
         return taskRepository.save(existingTask);
     }
+
 
 }

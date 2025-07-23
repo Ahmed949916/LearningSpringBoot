@@ -14,7 +14,6 @@ public class Task {
     private String title;
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "owner_id")
-    private Users owner;
+    @Column(name = "owner_id")
+    private Long ownerId;
 }

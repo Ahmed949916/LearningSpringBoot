@@ -31,10 +31,11 @@ public class TaskController {
         return taskService.createTask(task);
     }
 
-    @PatchMapping
-    public Task updateTask(@RequestBody Task task){
-        return taskService.updateTask(task);
+    @PatchMapping("/{id}")
+    public Task updateTask(@PathVariable Long id, @RequestBody Task task) {
+        return taskService.updateTask(id, task);
     }
+
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
