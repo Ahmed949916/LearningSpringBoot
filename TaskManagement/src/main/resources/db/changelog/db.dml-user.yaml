@@ -4,7 +4,7 @@ databaseChangeLog:
       author: users-team
       changes:
         - insert:
-            tableName: user
+            tableName: users
             columns:
               - column:
                   name: id
@@ -23,7 +23,7 @@ databaseChangeLog:
       author: users-team
       changes:
         - insert:
-            tableName: user
+            tableName: users
             columns:
               - column:
                   name: id
