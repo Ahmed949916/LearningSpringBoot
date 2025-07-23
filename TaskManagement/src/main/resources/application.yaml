@@ -4,6 +4,8 @@ spring:
       client:
         registration:
           google:
+            client-id: 308205996469-7ir7g5l6epj2ja4re4qg42msmdgtvm39.apps.googleusercontent.com
+            client-secret: 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
 
             scope:
               - openid
