@@ -26,18 +26,17 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         // Extract Google email
         String email = oAuth2User.getAttribute("email");
-        String name = oAuth2User.getAttribute("name");
-
-        // Check if user exists in DB
+        System.out.println("Google attributes: " + oAuth2User.getAttributes());
         Users user = userRepo.findByUsername(email)
                 .orElseGet(() -> {
-                    // If not exists, create a new one
+                    System.out.println("Saving new user: " + email);
                     Users newUser = new Users();
                     newUser.setUsername(email);
-                    newUser.setPassword(""); // no password needed for Google login
+                    newUser.setPassword(""); // no password
                     newUser.setRole("ROLE_USER");
                     return userRepo.save(newUser);
                 });
+
 
         // Return Spring Security User with ROLE_USER
         return new DefaultOAuth2User(
