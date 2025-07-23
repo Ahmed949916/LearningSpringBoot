@@ -3,10 +3,7 @@ package org.redmath.taskmanagement.controller;
 import org.redmath.taskmanagement.entity.Users;
 import org.redmath.taskmanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -17,6 +14,12 @@ public class UserController {
     private UserController(UserService userService) {
         this.userService = userService;
     }
+
+    @PostMapping
+    public Users createUser(@RequestBody Users user) {
+        return userService.createUser(user);
+    }
+
 
 
     @GetMapping("/{id}")
