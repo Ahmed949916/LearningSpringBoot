@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - include:
+        file: db.ddl-user.yaml
+        relativeToChangelogFile: true
+
+  - include:
+        file: db.dml-user.yaml
+        relativeToChangelogFile: true
+
+  - include:
+      file: db.ddl-task.yaml
+      relativeToChangelogFile: true
+
+  - include:
+        file: db.dml-task.yaml
+        relativeToChangelogFile: true
+
+

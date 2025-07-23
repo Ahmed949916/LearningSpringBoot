@@ -5,6 +5,9 @@ import org.redmath.taskmanagement.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+
 @Service
 public class UserService {
     private final UserRepo userRepo;
@@ -21,5 +24,13 @@ public class UserService {
 
     public Users createUser(Users user) {
         return userRepo.save(user);
+    }
+
+    public Users findByUsername(String email)   {
+        return userRepo.findByUsername(email).orElseThrow();
+    }
+
+    public List<Users> getAllUsers() {
+        return userRepo.findAll();
     }
 }

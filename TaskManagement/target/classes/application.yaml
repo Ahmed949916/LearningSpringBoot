@@ -1,0 +1,40 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 308205996469-7ir7g5l6epj2ja4re4qg42msmdgtvm39.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - openid
+              - profile
+              - email
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+
+  profiles:
+    active: local
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: ${my.db.url}
+    username: ${my.db.username}
+    password: ${my.db.password}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+logging:
+  level:
+    sql: debug
+    root: info
+jwt:
+  signing:
+    key: 1234567890123456789012345678901234567890
+server:
+  port: 8080

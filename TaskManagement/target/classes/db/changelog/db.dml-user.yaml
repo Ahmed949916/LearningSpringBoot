@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: data-0.0.1
+      author: users-team
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 1
+              - column:
+                  name: username
+                  value: test
+              - column:
+                  name: password
+                  value: "{noop}test"
+              - column:
+                  name: role
+                  value: ROLE_USER
+  - changeSet:
+      id: data-0.0.2
+      author: users-team
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 2
+              - column:
+                  name: username
+                  value: admin
+              - column:
+                  name: password
+                  value: "{noop}admin"
+              - column:
+                  name: role
+                  value: ROLE_ADMIN
+
+
