@@ -8,9 +8,10 @@ spring:
             client-secret: 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
 
             scope:
-              - openid
               - profile
               - email
+
+
         provider:
           google:
             authorization-uri: https://accounts.google.com/o/oauth2/auth

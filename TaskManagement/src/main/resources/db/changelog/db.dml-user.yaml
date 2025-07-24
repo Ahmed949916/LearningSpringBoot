@@ -7,7 +7,7 @@ databaseChangeLog:
             tableName: users
             columns:
               - column:
-                  name: id
+                  name: user_id
                   valueNumeric: 1
               - column:
                   name: username
@@ -26,7 +26,7 @@ databaseChangeLog:
             tableName: users
             columns:
               - column:
-                  name: id
+                  name: user_id
                   valueNumeric: 2
               - column:
                   name: username

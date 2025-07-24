@@ -7,7 +7,7 @@ databaseChangeLog:
             tableName: task
             columns:
               - column:
-                  name: id
+                  name: task_id
                   type: BIGINT
                   autoIncrement: true
 
@@ -25,13 +25,13 @@ databaseChangeLog:
 
         - addPrimaryKey:
             tableName: task
-            columnNames: id
+            columnNames: task_id
             constraintName: task_pk
 
         - addForeignKeyConstraint:
             baseTableName: task
             baseColumnNames: owner_id
             referencedTableName: users
-            referencedColumnNames: id
+            referencedColumnNames: user_id
             constraintName: fk_task_owner
             onDelete: CASCADE

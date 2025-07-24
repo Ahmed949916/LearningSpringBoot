@@ -10,7 +10,7 @@ import lombok.Setter;
 public class Task {
     @Id
     @GeneratedValue
-    private Long id;
+    private Long taskId;
     private String title;
     private String description;
 
