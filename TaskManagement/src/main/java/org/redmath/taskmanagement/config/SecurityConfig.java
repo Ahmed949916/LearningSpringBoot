@@ -10,6 +10,7 @@ import org.redmath.taskmanagement.service.CustomOAuth2UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.*;
@@ -23,6 +24,7 @@ import java.time.Instant;
         security = @SecurityRequirement(name = "bearerAuth")
 )
 @SecurityScheme(name = "bearerAuth", type = SecuritySchemeType.HTTP, bearerFormat = "JWT", scheme = "bearer")
+@Profile("!test")
 public class SecurityConfig {
 
     @Value("${jwt.signing.key}")
