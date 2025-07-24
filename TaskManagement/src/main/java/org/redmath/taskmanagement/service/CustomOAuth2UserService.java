@@ -26,6 +26,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         // Extract Google email
         String email = oAuth2User.getAttribute("email");
+        if (email == null) {
+            throw new RuntimeException("Google did not return an email!");
+        }
         System.out.println("Google attributes: " + oAuth2User.getAttributes());
         Users user = userRepo.findByUsername(email)
                 .orElseGet(() -> {
