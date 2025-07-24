@@ -1,0 +1,3 @@
+org\redmath\taskmanagement\config\SecurityConfig.class
+org\redmath\taskmanagement\Main.class
+org\redmath\taskmanagement\config\RequestLoggingFilter.class

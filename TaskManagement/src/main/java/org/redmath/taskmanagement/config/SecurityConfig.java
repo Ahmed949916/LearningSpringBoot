@@ -24,7 +24,7 @@ import java.time.Instant;
         security = @SecurityRequirement(name = "bearerAuth")
 )
 @SecurityScheme(name = "bearerAuth", type = SecuritySchemeType.HTTP, bearerFormat = "JWT", scheme = "bearer")
-@Profile("!test")
+
 public class SecurityConfig {
 
     @Value("${jwt.signing.key}")
@@ -49,6 +49,7 @@ public class SecurityConfig {
     }
 
     @Bean
+    @Profile("!test")
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtEncoder jwtEncoder) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
@@ -83,6 +84,17 @@ public class SecurityConfig {
                 )
                 .logout(logout -> logout.logoutSuccessUrl("/").permitAll());
 
+        return http.build();
+    }
+
+    @Bean
+    @Profile("test")
+    public SecurityFilterChain testSecurityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().permitAll()
+                )
+                .csrf(csrf -> csrf.disable());
         return http.build();
     }
 }

@@ -23,11 +23,11 @@ public class UserControllerTest {
                 .andExpect(status().isOk());
     }
 
-    // You can still test with authentication if needed
     @Test
-    public void testGetUserByIdWithMockAuth() throws Exception {
-        mockMvc.perform(get("/api/user/1")
-                        .header("Authorization", "Bearer mock-token"))
+    public void testGetUserByIdWithoutAuth() throws Exception {
+        mockMvc.perform(get("/api/user/1"))
                 .andExpect(status().isOk());
     }
+
+
 }
