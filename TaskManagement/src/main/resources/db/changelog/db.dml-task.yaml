@@ -6,9 +6,7 @@ databaseChangeLog:
         - insert:
             tableName: task
             columns:
-              - column:
-                  name: task_id
-                  valueNumeric: 1
+
               - column:
                   name: title
                   value: "First Task"
@@ -22,9 +20,7 @@ databaseChangeLog:
         - insert:
             tableName: task
             columns:
-              - column:
-                  name: task_id
-                  valueNumeric: 2
+
               - column:
                   name: title
                   value: "Admin Task"

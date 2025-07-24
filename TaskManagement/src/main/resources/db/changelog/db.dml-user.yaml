@@ -6,9 +6,7 @@ databaseChangeLog:
         - insert:
             tableName: users
             columns:
-              - column:
-                  name: user_id
-                  valueNumeric: 1
+
               - column:
                   name: username
                   value: test
@@ -25,9 +23,7 @@ databaseChangeLog:
         - insert:
             tableName: users
             columns:
-              - column:
-                  name: user_id
-                  valueNumeric: 2
+
               - column:
                   name: username
                   value: admin
