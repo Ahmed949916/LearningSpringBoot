@@ -19,7 +19,7 @@ spring:
             user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
 
   profiles:
-    active: test
+    active: local
   h2:
     console:
       enabled: true
