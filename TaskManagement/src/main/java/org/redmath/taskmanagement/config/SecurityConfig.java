@@ -52,8 +52,12 @@ public class SecurityConfig {
     @Profile("!test")
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtEncoder jwtEncoder) throws Exception {
         http
+                .csrf(csrf->csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+
                         .requestMatchers("/", "/api/public/**").permitAll()
+                        .requestMatchers("/api/task/**").authenticated()
+
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2

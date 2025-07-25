@@ -1,46 +1,75 @@
 package org.redmath.taskmanagement.service;
 
 import org.redmath.taskmanagement.entity.Task;
+import org.redmath.taskmanagement.entity.Users;
 import org.redmath.taskmanagement.repository.TaskRepo;
+import org.redmath.taskmanagement.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+
 @Service
 public class TaskService {
 
     private final TaskRepo taskRepository;
+    private final UserRepo userRepo;
 
     @Autowired
-    public TaskService(TaskRepo repo) {
+    public TaskService(TaskRepo repo, UserRepo userRepo) {
         this.taskRepository = repo;
+        this.userRepo = userRepo;
     }
 
-    public List<Task> getTasksByUserId(Long id) {
-        return taskRepository.findByOwnerId(id);
+    public List<Task> getTasksByUserId(Long userId,String username) throws AccessDeniedException {
+        Users user = userRepo.findByUsername(username)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        if (!userId.equals(user.getUserId())) {
+            throw new AccessDeniedException("You can only view your own tasks");
+        }
+        return taskRepository.findByOwnerId(userId);
     }
 
-    public Task createTask(Task task) {
+    public Task createTask(Task task, String username) {
+        Users user = userRepo.findByUsername(username)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+        task.setOwnerId(user.getUserId());
         return taskRepository.save(task);
     }
 
-    public void deleteTask(Long id) {
+    public void deleteTask(Long id, String username) throws AccessDeniedException {
         Task task = taskRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Task with ID " + id + " not found"));
+                .orElseThrow(() -> new NoSuchElementException("Task not found"));
+
+        Users user = userRepo.findByUsername(username)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        if (!task.getOwnerId().equals(user.getUserId())) {
+            throw new AccessDeniedException("You can only delete your own tasks");
+        }
+
         taskRepository.delete(task);
     }
 
-
-    public Task updateTask(Long id, Task req) {
+    public Task updateTask(Long id, Task req, String username) throws AccessDeniedException {
         Task existingTask = taskRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Task not found"));
+
+        Users user = userRepo.findByUsername(username)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        if (!existingTask.getOwnerId().equals(user.getUserId())) {
+            throw new AccessDeniedException("You can only update your own tasks");
+        }
 
         if (req.getTitle() != null) existingTask.setTitle(req.getTitle());
         if (req.getDescription() != null) existingTask.setDescription(req.getDescription());
@@ -49,8 +78,16 @@ public class TaskService {
         return taskRepository.save(existingTask);
     }
 
+    public Task findById(Long id, String username) throws AccessDeniedException {
+        Task task = taskRepository.findById(id).orElseThrow();
 
-    public Task findById(Long id) {
-        return taskRepository.findById(id).orElseThrow();
+        Users user = userRepo.findByUsername(username)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        if (!task.getOwnerId().equals(user.getUserId())) {
+            throw new AccessDeniedException("You can only view your own tasks");
+        }
+
+        return task;
     }
 }
