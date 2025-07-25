@@ -25,7 +25,7 @@ public class TaskController {
     public TaskController(TaskService taskService) {
         this.taskService = taskService;
     }
-
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Task createTask(@RequestBody Task task){
         return taskService.createTask(task);

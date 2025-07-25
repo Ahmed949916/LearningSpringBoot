@@ -3,6 +3,7 @@ package org.redmath.taskmanagement.controller;
 import org.redmath.taskmanagement.entity.Users;
 import org.redmath.taskmanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Users createUser(@RequestBody Users user) {
         return userService.createUser(user);
@@ -38,5 +40,13 @@ public class UserController {
     @GetMapping("/{id}")
     public Users getUserById(@PathVariable  Long id){
         return userService.getUserById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+
+
     }
 }

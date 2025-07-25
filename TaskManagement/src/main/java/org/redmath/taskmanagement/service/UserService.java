@@ -33,4 +33,9 @@ public class UserService {
     public List<Users> getAllUsers() {
         return userRepo.findAll();
     }
+
+    public void deleteUser(Long id) {
+        Users user = userRepo.findById(id).orElseThrow(() -> new NoSuchElementException("User not found with id: " + id));
+        userRepo.delete(user);
+    }
 }
