@@ -115,5 +115,12 @@ class TaskControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].ownerId").value(1));
     }
 
+    @Test
+    public void testGetTaskByIdNotFound() throws Exception {
+        mockMvc.perform(get("/api/task/9999"))
+                .andExpect(status().isNotFound());
+    }
+
+
 
 }

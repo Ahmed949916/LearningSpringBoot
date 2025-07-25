@@ -85,6 +85,18 @@ public class UserControllerTest {
         mockMvc.perform(get("/api/user/" + id))
                 .andExpect(status().isNotFound());
     }
+    @Test
+    public void testGetUserByIdNotFound() throws Exception {
+        mockMvc.perform(get("/api/user/9999"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testGetUserDetailsWithoutAuth() throws Exception {
+        mockMvc.perform(get("/api/user/me"))
+                .andExpect(status().isUnauthorized());
+    }
+
 
 
 

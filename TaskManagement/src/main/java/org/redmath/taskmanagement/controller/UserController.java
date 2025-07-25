@@ -4,6 +4,7 @@ import org.redmath.taskmanagement.entity.Users;
 import org.redmath.taskmanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +29,11 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public Map<String, Object> userDetails(@AuthenticationPrincipal OAuth2User principal) {
-        return principal.getAttributes();
+    public ResponseEntity<?> userDetails(@AuthenticationPrincipal OAuth2User principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+        }
+        return ResponseEntity.ok(principal.getAttributes());
     }
     @GetMapping
     public List<Users> getAllUsers() {
