@@ -1,6 +1,7 @@
 package org.redmath.taskmanagement.service;
 
 import org.redmath.taskmanagement.entity.Task;
+import org.redmath.taskmanagement.entity.TaskCreateRequest;
 import org.redmath.taskmanagement.entity.Users;
 import org.redmath.taskmanagement.repository.TaskRepo;
 import org.redmath.taskmanagement.repository.UserRepo;
@@ -39,11 +40,14 @@ public class TaskService {
         return taskRepository.findByOwnerId(userId);
     }
 
-    public Task createTask(Task task, String username) {
+    public Task createTask(TaskCreateRequest task, String username) {
         Users user = userRepo.findByUsername(username)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
-        task.setOwnerId(user.getUserId());
-        return taskRepository.save(task);
+        Task newTask=new Task();
+        newTask.setTitle(task.getTitle());
+        newTask.setDescription(task.getDescription());
+        newTask.setOwnerId(user.getUserId());
+        return taskRepository.save(newTask);
     }
 
     public void deleteTask(Long id, String username) throws AccessDeniedException {

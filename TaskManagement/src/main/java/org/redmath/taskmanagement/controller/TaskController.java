@@ -3,6 +3,7 @@ package org.redmath.taskmanagement.controller;
 
 import lombok.Generated;
 import org.redmath.taskmanagement.entity.Task;
+import org.redmath.taskmanagement.entity.TaskCreateRequest;
 import org.redmath.taskmanagement.entity.Users;
 import org.redmath.taskmanagement.service.TaskService;
 import org.slf4j.Logger;
@@ -33,7 +34,7 @@ public class TaskController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Task createTask(@RequestBody Task task, @AuthenticationPrincipal OAuth2User principal) {
+    public Task createTask(@RequestBody TaskCreateRequest task, @AuthenticationPrincipal OAuth2User principal) {
         String username = principal.getAttribute("email");
         return taskService.createTask(task, username);
     }
