@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.*;
@@ -24,7 +26,7 @@ import java.time.Instant;
         security = @SecurityRequirement(name = "bearerAuth")
 )
 @SecurityScheme(name = "bearerAuth", type = SecuritySchemeType.HTTP, bearerFormat = "JWT", scheme = "bearer")
-
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Value("${jwt.signing.key}")
@@ -57,6 +59,7 @@ public class SecurityConfig {
 
                         .requestMatchers("/", "/api/public/**").permitAll()
                         .requestMatchers("/api/task/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/user/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated()
                 )

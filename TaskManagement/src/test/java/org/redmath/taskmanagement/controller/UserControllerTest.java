@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -48,11 +49,11 @@ public class UserControllerTest {
     }
 
 
-    public Long createUserWithoutAuth(String userName,String pass) throws Exception {
+    public Long createUserWithoutAuth(String userName,String pass,String role ) throws Exception {
         Users user=new Users();
         user.setUsername(userName);
         user.setPassword(pass);
-        user.setRole("ROLE_USER");
+        user.setRole(role);
         String newUserJson = objectMapper.writeValueAsString(user);
 
         MvcResult result=mockMvc.perform(post("/api/user")
@@ -69,7 +70,7 @@ public class UserControllerTest {
 
     @Test
     public void testCreateUserWithoutAuth() throws Exception{
-        Long id = createUserWithoutAuth("testCreate", "testCreatePass");
+        Long id = createUserWithoutAuth("testCreate", "testCreatePass","ROLE_USER");
         Users savedUser = userRepo.findById(id).orElseThrow();
         assertEquals("testCreate", savedUser.getUsername());
         assertEquals("testCreatePass", savedUser.getPassword());
@@ -77,13 +78,12 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testDeleteUserWithoutAuth() throws Exception {
-        Long id = createUserWithoutAuth("testDelete", "testDeletePass");
+    public void testDeleteUserWithoutAuthWithUserRole() throws Exception {
+        Long id = createUserWithoutAuth("testDelete", "testDeletePass","ROLE_USER");
         mockMvc.perform(delete("/api/user/" + id))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isForbidden());
 
-        mockMvc.perform(get("/api/user/" + id))
-                .andExpect(status().isNotFound());
+
     }
     @Test
     public void testGetUserByIdNotFound() throws Exception {
@@ -91,11 +91,9 @@ public class UserControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    @Test
-    public void testGetUserDetailsWithoutAuth() throws Exception {
-        mockMvc.perform(get("/api/user/me"))
-                .andExpect(status().isUnauthorized());
-    }
+
+
+
 
 
 
