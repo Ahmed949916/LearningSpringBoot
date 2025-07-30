@@ -30,13 +30,8 @@ public class TaskService {
         this.userRepo = userRepo;
     }
 
-    public List<Task> getTasksByUserId(Long userId,String username) throws AccessDeniedException {
-        Users user = userRepo.findByUsername(username)
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
+    public List<Task> getTasksByUserId(Long userId) throws AccessDeniedException {
 
-        if (!userId.equals(user.getUserId())) {
-            throw new AccessDeniedException("You can only view your own tasks");
-        }
         return taskRepository.findByOwnerId(userId);
     }
 
