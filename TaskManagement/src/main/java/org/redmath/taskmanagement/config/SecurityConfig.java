@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import org.redmath.taskmanagement.entity.Users;
+import org.redmath.taskmanagement.repository.UserRepo;
 import org.redmath.taskmanagement.service.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +19,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.web.SecurityFilterChain;
@@ -41,9 +44,11 @@ public class SecurityConfig {
     private String signingKey;
 
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final UserRepo userRepo;
 
-    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService) {
+    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService, UserRepo userRepo) {
         this.customOAuth2UserService = customOAuth2UserService;
+        this.userRepo = userRepo;
     }
 
     @Bean
@@ -72,47 +77,43 @@ public class SecurityConfig {
     }
 
 
-
     @Bean
     @Profile("!test")
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtEncoder jwtEncoder) throws Exception {
         http
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt.decoder(jwtDecoder())))
-                .csrf(csrf->csrf.disable())
-
-
-
+                .csrf(csrf -> csrf.disable())
+                .cors(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-
-
                         .requestMatchers("/", "/api/public/**").permitAll()
-                        .requestMatchers(
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html"
-                        ).permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/login/oauth2/**", "/oauth2/**").permitAll()
-
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                                .requestMatchers("/api/task/**").authenticated()
+                        .requestMatchers("/api/task/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/user/**").hasRole("ADMIN")
-
                         .anyRequest().authenticated()
-                );
-        http.oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt.decoder(jwtDecoder())
-                        ));
-        http.oauth2Login(oauth2 -> oauth2
+                )
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwt -> jwt.decoder(jwtDecoder()))
+                )
+                .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
                         .successHandler((request, response, authentication) -> {
-
                             long expirySeconds = 3600;
+
+
+                            OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+                            String email = oAuth2User.getAttribute("email");
+
+
+                            Users user = userRepo.findByUsername(email)
+                                    .orElseThrow(() -> new RuntimeException("User not found"));
+
                             JwtClaimsSet claims = JwtClaimsSet.builder()
                                     .subject(authentication.getName())
                                     .issuedAt(Instant.now())
                                     .expiresAt(Instant.now().plusSeconds(expirySeconds))
+                                    .claim("userId", user.getUserId())
                                     .claim("roles", authentication.getAuthorities().stream()
                                             .map(a -> a.getAuthority())
                                             .toList())
@@ -130,11 +131,8 @@ public class SecurityConfig {
                             response.getWriter().print(jsonResponse);
                         })
                 )
-
-                .logout(logout -> logout.logoutSuccessUrl("/").permitAll());
-        http.headers(headers -> headers
-                .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
-        );
+                .logout(logout -> logout.logoutSuccessUrl("/").permitAll())
+                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
 
         return http.build();
     }

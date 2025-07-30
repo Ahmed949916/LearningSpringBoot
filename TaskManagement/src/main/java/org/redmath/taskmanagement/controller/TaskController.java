@@ -1,4 +1,3 @@
-
 package org.redmath.taskmanagement.controller;
 
 import lombok.Generated;
@@ -11,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
@@ -19,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-
 
 @RestController
 @RequestMapping("/api/task")
@@ -34,35 +32,29 @@ public class TaskController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Task createTask(@RequestBody TaskCreateRequest task, @AuthenticationPrincipal OAuth2User principal) {
-        String username = principal.getAttribute("email");
-        return taskService.createTask(task, username);
+    public Task createTask(@RequestBody TaskCreateRequest task, @AuthenticationPrincipal Jwt jwt) {
+        Long userId = jwt.getClaim("userId");
+        return taskService.createTask(task, userId);
     }
 
     @PatchMapping("/{id}")
-    public Task updateTask(@PathVariable Long id, @RequestBody Task task, @AuthenticationPrincipal OAuth2User principal) throws AccessDeniedException {
-        String username = principal.getAttribute("email");
-        return taskService.updateTask(id, task, username);
+    public Task updateTask(@PathVariable Long id, @RequestBody Task task, @AuthenticationPrincipal Jwt jwt) throws AccessDeniedException {
+        Long userId = jwt.getClaim("userId");
+        return taskService.updateTask(id, task, userId);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTask(@PathVariable Long id, @AuthenticationPrincipal OAuth2User principal) throws AccessDeniedException {
-        String username = principal.getAttribute("email");
-        taskService.deleteTask(id, username);
+    public void deleteTask(@PathVariable Long id, @AuthenticationPrincipal Jwt jwt) throws AccessDeniedException {
+        Long userId = jwt.getClaim("userId");
+        taskService.deleteTask(id, userId);
     }
 
     @GetMapping("/{id}")
-    public Task getTaskById(@PathVariable Long id, @AuthenticationPrincipal OAuth2User principal)  throws AccessDeniedException {
-        String username = principal.getAttribute("email");
-        return taskService.findById(id, username);
+    public Task getTaskById(@PathVariable Long id, @AuthenticationPrincipal Jwt jwt) throws AccessDeniedException {
+        Long userId = jwt.getClaim("userId");
+        return taskService.findById(id, userId);
     }
 
-    @GetMapping("/owner/{id}")
-    public List<Task> getTasksByUserId(@PathVariable Long id, @AuthenticationPrincipal OAuth2User principal) throws AccessDeniedException {
-        String username = principal.getAttribute("email");
 
-
-        return taskService.getTasksByUserId(id,username);
-    }
 }

@@ -30,13 +30,7 @@ public class UserController {
         return userService.createUser(user);
     }
 
-    @GetMapping("/me")
-    public ResponseEntity<?> userDetails(@AuthenticationPrincipal OAuth2User principal) {
-        if (principal == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
-        }
-        return ResponseEntity.ok(principal.getAttributes());
-    }
+
     @GetMapping
     public List<Users> getAllUsers() {
         return userService.getAllUsers();

@@ -40,8 +40,8 @@ public class TaskService {
         return taskRepository.findByOwnerId(userId);
     }
 
-    public Task createTask(TaskCreateRequest task, String username) {
-        Users user = userRepo.findByUsername(username)
+    public Task createTask(TaskCreateRequest task,Long userId ) {
+        Users user = userRepo.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
         Task newTask=new Task();
         newTask.setTitle(task.getTitle());
@@ -50,11 +50,11 @@ public class TaskService {
         return taskRepository.save(newTask);
     }
 
-    public void deleteTask(Long id, String username) throws AccessDeniedException {
+    public void deleteTask(Long id, Long userId) throws AccessDeniedException {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Task not found"));
 
-        Users user = userRepo.findByUsername(username)
+        Users user = userRepo.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
 
         if (!task.getOwnerId().equals(user.getUserId())) {
@@ -64,11 +64,11 @@ public class TaskService {
         taskRepository.delete(task);
     }
 
-    public Task updateTask(Long id, Task req, String username) throws AccessDeniedException {
+    public Task updateTask(Long id, Task req, Long userId) throws AccessDeniedException {
         Task existingTask = taskRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Task not found"));
 
-        Users user = userRepo.findByUsername(username)
+        Users user = userRepo.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
 
         if (!existingTask.getOwnerId().equals(user.getUserId())) {
@@ -82,10 +82,10 @@ public class TaskService {
         return taskRepository.save(existingTask);
     }
 
-    public Task findById(Long id, String username) throws AccessDeniedException {
+    public Task findById(Long id, Long userId) throws AccessDeniedException {
         Task task = taskRepository.findById(id).orElseThrow();
 
-        Users user = userRepo.findByUsername(username)
+        Users user = userRepo.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
 
         if (!task.getOwnerId().equals(user.getUserId())) {
