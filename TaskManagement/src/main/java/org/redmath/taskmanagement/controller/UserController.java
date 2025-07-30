@@ -1,17 +1,12 @@
 package org.redmath.taskmanagement.controller;
-
 import org.redmath.taskmanagement.entity.Users;
 import org.redmath.taskmanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
-
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 
@@ -38,13 +33,13 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/me")
+    @GetMapping("/profile")
     public Users getCurrentUser(@AuthenticationPrincipal Jwt jwt) throws AccessDeniedException {
-        String userId= jwt.getClaim("userId");
+        Long userId = jwt.getClaim("userId");
         if (userId == null) {
             throw new AccessDeniedException("User not authenticated");
         }
-        return userService.getUserById(Long.parseLong(userId));
+        return userService.getUserById(userId);
     }
 
 

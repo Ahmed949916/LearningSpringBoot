@@ -11,39 +11,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getTasks, createTask, updateTask, deleteTask } from '../services/api';
 import { useAuth } from '../Context/AuthContext';
-const dummyTask=[
-  {
-    "taskId": 1,
-    "title": "Finish React project",
-    "description": "Complete all components and connect to backend",
-    "ownerId": 101
-  },
-  {
-    "taskId": 2,
-    "title": "Write blog post",
-    "description": "Write a new post about React hooks and context",
-    "ownerId": 101
-  },
-  {
-    "taskId": 3,
-    "title": "Team meeting",
-    "description": "Discuss progress and blockers with the development team",
-    "ownerId": 101
-  },
-  {
-    "taskId": 4,
-    "title": "Review PRs",
-    "description": "Go through all pending pull requests before EOD",
-    "ownerId": 101
-  },
-  {
-    "taskId": 5,
-    "title": "Update documentation",
-    "description": "Add new API endpoints to the Postman collection and README",
-    "ownerId": 101
-  }
-]
-
+import CustomButton from '../Components/CustomButton';
+ 
 const TasksPage = () => {
   const { token, logout } = useAuth();
   const [tasks, setTasks] = useState([]);
@@ -147,14 +116,12 @@ console.log("ewrwerwerrewrewr",tasks);
       
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
         <Typography variant="h4">Tasks</Typography>
-        <Button 
-          variant="contained" 
-          startIcon={<AddIcon />}
+        <CustomButton
           onClick={() => handleOpenDialog()}
-          disabled={loading}
+          startIcon={<AddIcon />}
         >
           Add Task
-        </Button>
+        </CustomButton>
       </Box>
 
       {loading ? (
@@ -165,7 +132,7 @@ console.log("ewrwerwerrewrewr",tasks);
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
-              <TableRow>
+              <TableRow  sx={{ backgroundColor: '#fffcf4ff' }}>
                 <TableCell>Title</TableCell>
                 <TableCell>Description</TableCell>
                 <TableCell>Actions</TableCell>
@@ -197,8 +164,10 @@ console.log("ewrwerwerrewrewr",tasks);
         </TableContainer>
       )}
 
+ 
+
       <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle>{isEdit ? 'Edit Task' : 'Add Task'}</DialogTitle>
+        <DialogTitle sx={{  color:"#4A9782" }}>{isEdit ? 'Edit Task' : 'Add Task'}</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -207,6 +176,7 @@ console.log("ewrwerwerrewrewr",tasks);
             label="Title"
             type="text"
             fullWidth
+          
             variant="standard"
             value={currentTask.title}
             onChange={handleInputChange}
@@ -227,10 +197,12 @@ console.log("ewrwerwerrewrewr",tasks);
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog} disabled={loading}>Cancel</Button>
-          <Button onClick={handleSubmit} disabled={loading}>
-            {loading ? <CircularProgress size={24} /> : isEdit ? 'Update' : 'Create'}
-          </Button>
+          <CustomButton onClick={handleCloseDialog} disabled={loading}>
+            Cancel
+          </CustomButton>
+        <CustomButton onClick={handleSubmit} disabled={loading}>
+          {loading ? <CircularProgress size={24} /> : isEdit ? 'Update' : 'Create'}
+        </CustomButton>
         </DialogActions>
       </Dialog>
     </Box>

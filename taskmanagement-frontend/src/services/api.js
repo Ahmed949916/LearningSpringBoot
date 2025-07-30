@@ -53,14 +53,10 @@ export const login = async (username, password) => {
         withCredentials: true
       }
     );
-
     if (response.status === 200 && response.data.access_token) {
-      // Store the token
       localStorage.setItem('token', response.data.access_token);
-      
       // Set default Authorization header for future requests
       axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access_token}`;
-      
       return response.data;
     }
     throw new Error('Authentication failed');
@@ -99,6 +95,12 @@ export const getUsers = async () => {
 
 export const deleteUser = async (id) => {
   return api.delete(`/user/${id}`);
+};
+
+export const getSelf = async () => {
+  const response = await api.get('/user/profile');
+  console.log('User data:', response.data);
+  return response.data;
 };
 
 export default api;

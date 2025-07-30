@@ -5,6 +5,8 @@ import TasksPage from './pages/TasksPage';
 import UsersPage from './pages/UsersPage';
 import OAuth2RedirectHandler from './pages/OAuth2RedirectHandler';
 import { AuthProvider } from './Context/AuthContext';
+import Profile from './pages/Profile';
+import Layout from './Components/Layout';
  
 const theme = createTheme({
   palette: {
@@ -23,17 +25,18 @@ function App() {
       <CssBaseline />
       <Router>
         <AuthProvider>
-          <Routes>
-            <Route path="/" element={<LoginPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
-            <Route path="/tasks" element={<TasksPage />} />
-            <Route path="/users" element={<UsersPage />} />
-          </Routes>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<LoginPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
+              <Route path="/profile" element={<Profile />}/>
+              <Route path="/tasks" element={<TasksPage />} />
+              <Route path="/users" element={<UsersPage />} />
+            </Routes>
+          </Layout>
         </AuthProvider>
       </Router>
     </ThemeProvider>
   );
-}
-
-export default App;
+}export default App;
