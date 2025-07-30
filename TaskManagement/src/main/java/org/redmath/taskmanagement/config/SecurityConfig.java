@@ -101,10 +101,8 @@ public class SecurityConfig {
                         .successHandler((request, response, authentication) -> {
                             long expirySeconds = 3600;
 
-
                             OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
                             String email = oAuth2User.getAttribute("email");
-
 
                             Users user = userRepo.findByUsername(email)
                                     .orElseThrow(() -> new RuntimeException("User not found"));
@@ -122,14 +120,42 @@ public class SecurityConfig {
                             var jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build();
                             String token = jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
 
-                            String jsonResponse = String.format(
-                                    "{\"token_type\":\"Bearer\",\"access_token\":\"%s\",\"expires_in\":%d }",
-                                    token, expirySeconds
-                            );
-
-                            response.setContentType("application/json");
-                            response.getWriter().print(jsonResponse);
+                            // Redirect to frontend with token instead of returning JSON
+                            String redirectUrl = "http://localhost:3000/oauth2/redirect?token=" + token + "&userId=" + user.getUserId();
+                            response.sendRedirect(redirectUrl);
                         })
+//                        .successHandler((request, response, authentication) -> {
+//                            long expirySeconds = 3600;
+//
+//
+//                            OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+//                            String email = oAuth2User.getAttribute("email");
+//
+//
+//                            Users user = userRepo.findByUsername(email)
+//                                    .orElseThrow(() -> new RuntimeException("User not found"));
+//
+//                            JwtClaimsSet claims = JwtClaimsSet.builder()
+//                                    .subject(authentication.getName())
+//                                    .issuedAt(Instant.now())
+//                                    .expiresAt(Instant.now().plusSeconds(expirySeconds))
+//                                    .claim("userId", user.getUserId())
+//                                    .claim("roles", authentication.getAuthorities().stream()
+//                                            .map(a -> a.getAuthority())
+//                                            .toList())
+//                                    .build();
+//
+//                            var jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build();
+//                            String token = jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
+//
+//                            String jsonResponse = String.format(
+//                                    "{\"token_type\":\"Bearer\",\"access_token\":\"%s\",\"expires_in\":%d }",
+//                                    token, expirySeconds
+//                            );
+//
+//                            response.setContentType("application/json");
+//                            response.getWriter().print(jsonResponse);
+//                        })
                 )
                 .logout(logout -> logout.logoutSuccessUrl("/").permitAll())
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));

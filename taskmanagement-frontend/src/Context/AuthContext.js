@@ -6,11 +6,16 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'));
+  const [userId, setUserId] = useState(localStorage.getItem('userId'));
   const navigate = useNavigate();
 
   const loginWithGoogle = () => {
-   
     window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+  };
+
+  const handleUserId = (id) => {
+    setUserId(id);
+    localStorage.setItem('userId', id);
   };
 
   const handleOAuthRedirect = async (token) => {
@@ -32,7 +37,9 @@ export const AuthProvider = ({ children }) => {
       token, 
       loginWithGoogle, 
       handleOAuthRedirect, 
-      logout 
+      logout ,
+      userId,
+      handleUserId
     }}>
       {children}
     </AuthContext.Provider>

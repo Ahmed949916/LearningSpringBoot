@@ -40,7 +40,7 @@ export const register = async (userData) => {
 };
 export const login = async (username, password) => {
   try {
-    // Create a new axios instance without default headers
+ 
     const authAxios = axios.create();
     
     const response = await authAxios.post(
@@ -74,7 +74,7 @@ export const logout = async () => {
 };
 
 export const getTasks = async () => {
-  const response = await api.get('/task/owner/1');
+  const response = await api.get('/task');
   return response.data;
 };
 

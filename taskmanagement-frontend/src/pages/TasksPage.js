@@ -63,7 +63,7 @@ const TasksPage = () => {
   const fetchTasks = async () => {
     setLoading(true);
     try {
-      const data = dummyTask//await getTasks();
+      const data = await getTasks();
       setTasks(data);
     } catch (error) {
       setError('Failed to fetch tasks');
