@@ -42,6 +42,7 @@ public class TaskService {
         newTask.setTitle(task.getTitle());
         newTask.setDescription(task.getDescription());
         newTask.setOwnerId(user.getUserId());
+        newTask.setCompleted(task.getCompleted() != null ? task.getCompleted() : Boolean.FALSE);
         return taskRepository.save(newTask);
     }
 
@@ -73,7 +74,7 @@ public class TaskService {
         if (req.getTitle() != null) existingTask.setTitle(req.getTitle());
         if (req.getDescription() != null) existingTask.setDescription(req.getDescription());
         if (req.getOwnerId() != null) existingTask.setOwnerId(req.getOwnerId());
-        if (req.getStatus() != null) existingTask.setStatus(req.getStatus());
+        if (req.getCompleted() != null) existingTask.setCompleted(req.getCompleted());
 
         return taskRepository.save(existingTask);
     }

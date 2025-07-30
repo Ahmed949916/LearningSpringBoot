@@ -10,4 +10,5 @@ import lombok.Setter;
 public class TaskCreateRequest {
     private String title;
     private String description;
+    private Boolean completed;
 }
