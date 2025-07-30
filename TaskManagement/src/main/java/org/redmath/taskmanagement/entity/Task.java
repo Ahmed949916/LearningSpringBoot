@@ -15,6 +15,7 @@ public class Task {
     private Long taskId;
     private String title;
     private String description;
+    private Boolean completed;
 
     @Column(name = "owner_id")
     private Long ownerId;

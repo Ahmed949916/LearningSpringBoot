@@ -6,7 +6,6 @@ databaseChangeLog:
         - insert:
             tableName: task
             columns:
-
               - column:
                   name: title
                   value: "First Task"
@@ -14,19 +13,23 @@ databaseChangeLog:
                   name: description
                   value: "This is a sample task for the test user"
               - column:
+                  name: completed
+                  valueBoolean: False
+              - column:
                   name: owner_id
                   valueNumeric: 1
-
         - insert:
             tableName: task
             columns:
-
               - column:
                   name: title
                   value: "Admin Task"
               - column:
                   name: description
                   value: "Task created by admin"
+              - column:
+                  name: completed
+                  valueBoolean: False
               - column:
                   name: owner_id
                   valueNumeric: 2

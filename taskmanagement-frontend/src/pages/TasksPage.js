@@ -4,7 +4,7 @@ import {
   Box, Button, Typography, Table, TableBody, TableCell, 
   TableContainer, TableHead, TableRow, Paper, IconButton,
   Dialog, DialogTitle, DialogContent, DialogActions, TextField,
-  CircularProgress, Alert, Snackbar
+  CircularProgress, Alert, Snackbar, Select, MenuItem, FormControl, InputLabel
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -17,7 +17,7 @@ const TasksPage = () => {
   const { token, logout } = useAuth();
   const [tasks, setTasks] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
-  const [currentTask, setCurrentTask] = useState({ title: '', description: '' });
+  const [currentTask, setCurrentTask] = useState({ title: '', description: '', completed: false });
   const [isEdit, setIsEdit] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -28,6 +28,10 @@ const TasksPage = () => {
       fetchTasks();
     }
   }, [token]);
+
+  useEffect(() => {
+    console.log('Current task state changed:', currentTask);
+  }, [currentTask]);
 
   const fetchTasks = async () => {
     setLoading(true);
@@ -46,7 +50,7 @@ const TasksPage = () => {
       setCurrentTask(task);
       setIsEdit(true);
     } else {
-      setCurrentTask({ title: '', description: '' });
+      setCurrentTask({ title: '', description: '', completed: false });
       setIsEdit(false);
     }
     setOpenDialog(true);
@@ -58,22 +62,37 @@ const TasksPage = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setCurrentTask(prev => ({ ...prev, [name]: value }));
+    console.log('Input change:', name, value);
+    if (name === 'completed') {
+      const booleanValue = value === 'true';
+      console.log('Converting completed value:', value, '→', booleanValue);
+      setCurrentTask(prev => {
+        const updated = { ...prev, [name]: booleanValue };
+        console.log('Updated task state:', updated);
+        return updated;
+      });
+    } else {
+      setCurrentTask(prev => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSubmit = async () => {
     setLoading(true);
     try {
+      console.log('Submitting task:', currentTask);
       if (isEdit) {
+        console.log('Updating task with data:', currentTask);
         await updateTask(currentTask.taskId, currentTask);
         setSuccess('Task updated successfully');
       } else {
+        console.log('Creating task with data:', currentTask);
         await createTask(currentTask);
         setSuccess('Task created successfully');
       }
       fetchTasks();
       handleCloseDialog();
     } catch (error) {
+      console.error('Submit error:', error);
       setError(isEdit ? 'Failed to update task' : 'Failed to create task');
     } finally {
       setLoading(false);
@@ -100,7 +119,7 @@ const TasksPage = () => {
       </Box>
     );
   }
-console.log("ewrwerwerrewrewr",tasks);
+ 
   return (
     <Box sx={{ p: 3 }}>
       {error && (
@@ -136,6 +155,7 @@ console.log("ewrwerwerrewrewr",tasks);
                 <TableCell>Title</TableCell>
                 <TableCell>Description</TableCell>
                 <TableCell>Actions</TableCell>
+                <TableCell>Status</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -156,6 +176,9 @@ console.log("ewrwerwerrewrewr",tasks);
                     >
                       <DeleteIcon />
                     </IconButton>
+                  </TableCell>
+                  <TableCell>
+                    {task.completed ? 'Completed' : 'Pending'}
                   </TableCell>
                 </TableRow>
               ))}
@@ -195,6 +218,19 @@ console.log("ewrwerwerrewrewr",tasks);
             onChange={handleInputChange}
             disabled={loading}
           />
+          <FormControl fullWidth margin="dense" variant="standard">
+            <InputLabel id="status-label">Status</InputLabel>
+            <Select
+              labelId="status-label"
+              name="completed"
+              value={currentTask.completed ? 'true' : 'false'}
+              onChange={handleInputChange}
+              disabled={loading}
+            >
+              <MenuItem value="false">Pending</MenuItem>
+              <MenuItem value="true">Completed</MenuItem>
+            </Select>
+          </FormControl>
         </DialogContent>
         <DialogActions>
           <CustomButton onClick={handleCloseDialog} disabled={loading}>

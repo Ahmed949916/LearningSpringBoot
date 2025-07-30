@@ -73,6 +73,7 @@ public class TaskService {
         if (req.getTitle() != null) existingTask.setTitle(req.getTitle());
         if (req.getDescription() != null) existingTask.setDescription(req.getDescription());
         if (req.getOwnerId() != null) existingTask.setOwnerId(req.getOwnerId());
+        if (req.getStatus() != null) existingTask.setStatus(req.getStatus());
 
         return taskRepository.save(existingTask);
     }
