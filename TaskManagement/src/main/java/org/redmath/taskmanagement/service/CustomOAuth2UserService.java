@@ -33,7 +33,7 @@ public class CustomOAuth2UserService extends  DefaultOAuth2UserService {
             throw new OAuth2AuthenticationException("Email not found from OAuth2 provider");
         }
 
-        System.out.println("✅ Google attributes: " + oAuth2User.getAttributes());
+        System.out.println(" Google attributes: " + oAuth2User.getAttributes());
 
 
         Users user = userRepo.findByUsername(email)
@@ -50,7 +50,7 @@ public class CustomOAuth2UserService extends  DefaultOAuth2UserService {
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(user.getRole())),
                 oAuth2User.getAttributes(),
-                "email"  // principal name key
+                "email"
         );
     }
 }
