@@ -1,0 +1,13 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            enabled: false
+
+my:
+  db:
+    username: sa
+    password: sa
+    url: jdbc:h2:mem:taskManagement
