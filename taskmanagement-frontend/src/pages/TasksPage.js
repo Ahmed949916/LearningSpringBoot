@@ -76,13 +76,13 @@ const TasksPage = () => {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      console.log('Submitting task:', currentTask);
+     
       if (isEdit) {
-        console.log('Updating task with data:', currentTask);
+        
         await updateTask(currentTask.taskId, currentTask);
         setSuccess('Task updated successfully');
       } else {
-        console.log('Creating task with data:', currentTask);
+        
         await createTask(currentTask);
         setSuccess('Task created successfully');
       }
