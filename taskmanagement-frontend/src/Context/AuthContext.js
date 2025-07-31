@@ -7,6 +7,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [userId, setUserId] = useState(localStorage.getItem('userId'));
+ 
   const navigate = useNavigate();
 
   const loginWithGoogle = () => {
@@ -27,8 +28,10 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('userId');
     delete axios.defaults.headers.common['Authorization'];
     setToken(null);
+    setUserId(null);
     navigate('/');
   };
 

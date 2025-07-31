@@ -7,7 +7,7 @@ const LoginPage = () => {
 
   return (
     <Box sx={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", height:"100vh",background:"#eaf3ffff"}} >
-      <Box >
+      <Box sx={{  width: '400px', padding: 6, backgroundColor: '#fff', borderRadius: 7 }}>
 
       <Typography variant="h4" component="h1" align="center" gutterBottom>
         Welcome to Task Management

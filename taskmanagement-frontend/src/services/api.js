@@ -65,6 +65,8 @@ export const login = async (username, password) => {
     throw error;
   }
 };
+
+
 export const logout = async () => {
   return api.post('/perform_logout');
 };
@@ -99,7 +101,7 @@ export const deleteUser = async (id) => {
 
 export const getSelf = async () => {
   const response = await api.get('/user/profile');
-  console.log('User data:', response.data);
+ 
   return response.data;
 };
 

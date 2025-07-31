@@ -33,6 +33,7 @@ const Profile = () => {
       <Typography>{user.name}</Typography>
       
         <Typography>Email: {user.username}</Typography>
+        <Typography>Role: {user.role}</Typography>
     
      
     </div>

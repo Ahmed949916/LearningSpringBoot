@@ -9,13 +9,13 @@ databaseChangeLog:
 
               - column:
                   name: username
-                  value: test
+                  value: ahmed40152@gmail.com
               - column:
                   name: password
-                  value: "{noop}test"
+                  value: ""
               - column:
                   name: role
-                  value: ROLE_USER
+                  value: ROLE_ADMIN
   - changeSet:
       id: data-0.0.2
       author: users-team

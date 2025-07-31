@@ -4,9 +4,10 @@ import { getSelf } from '../services/api';
 import { useAuth } from '../Context/AuthContext';
 import './Header.css';
 import CustomButton from './CustomButton';
-
+ 
 const Header = () => {
   const [userEmail, setUserEmail] = useState('');
+  const [userRole, setUserRole] = useState('ROLE_USER');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { token, logout } = useAuth();
 
@@ -18,11 +19,16 @@ const Header = () => {
           if (userData && userData.email) {
             setUserEmail(userData.email);
           }
+          if (userData && userData.role) {
+            setUserRole(userData.role);
+          }
         } catch (error) {
           console.error('Failed to fetch user data:', error);
         }
       }
     };
+ 
+
 
     fetchUserData();
   }, [token]);
@@ -46,7 +52,10 @@ const Header = () => {
                 <nav>
                     <ul className="nav-links">
                         <li><Link to="/tasks">Tasks</Link></li>
-                        {/* <li><Link to="/users">Users</Link></li> */}
+                        { userRole === 'ROLE_ADMIN' && (
+                            <li><Link to="/users">Users</Link></li>
+                        )}
+                        
                         <li><Link to="/profile">Profile</Link></li>
                     </ul>
                 </nav>
