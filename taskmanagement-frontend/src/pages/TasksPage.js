@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
  
 import { 
-  Box, Button, Typography, Table, TableBody, TableCell, 
+  Box,  Typography, Table, TableBody, TableCell, 
   TableContainer, TableHead, TableRow, Paper, IconButton,
   Dialog, DialogTitle, DialogContent, DialogActions, TextField,
   CircularProgress, Alert, Snackbar, Select, MenuItem, FormControl, InputLabel
@@ -14,7 +14,7 @@ import { useAuth } from '../Context/AuthContext';
 import CustomButton from '../Components/CustomButton';
  
 const TasksPage = () => {
-  const { token, logout } = useAuth();
+  const { token } = useAuth();
   const [tasks, setTasks] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [currentTask, setCurrentTask] = useState({ title: '', description: '', completed: false });
