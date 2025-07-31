@@ -4,21 +4,29 @@ A simple Spring Boot project created to learn and explore **Spring Boot features
 
 ---
 
-## ✅ Features
-- Spring Boot auto-configuration  
-- RESTful APIs with Spring Web  
-- Database integration with Spring Data JPA  
-- Basic unit & integration tests  
-- Actuator for monitoring  
+###  Task Management
+ 
 
----
+A full-stack task management application that allows users to:
 
+    Register and log in securely
+
+    Create, view, update, and delete personal tasks
+
+    Access only their own tasks (data privacy ensured)
+ 
+ 
 ## 🛠 Tech Stack
-- **Java 17+**  
-- **Spring Boot 3.x**  
-- **Maven**  
-- **H2**
-- **JUnit 5**  
 
- 
- 
+**Backend:**
+- Spring Boot 3.x
+- Spring Security
+- JPA/Hibernate
+- JWT Authentication
+
+**Frontend:**
+- React  
+- Context API for state management
+
+**Database:**
+- H2  
