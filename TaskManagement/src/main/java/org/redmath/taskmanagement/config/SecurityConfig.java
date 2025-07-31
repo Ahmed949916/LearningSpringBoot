@@ -30,6 +30,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import javax.crypto.spec.SecretKeySpec;
 import java.time.Instant;
 import java.util.List;
+import org.springframework.security.core.Authentication;
+
+
+
 
 @Configuration
 @OpenAPIDefinition(
@@ -99,29 +103,7 @@ public class SecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
                         .successHandler((request, response, authentication) -> {
-                            long expirySeconds = 3600;
-
-                            OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-                            String email = oAuth2User.getAttribute("email");
-
-                            Users user = userRepo.findByUsername(email)
-                                    .orElseThrow(() -> new RuntimeException("User not found"));
-
-                            JwtClaimsSet claims = JwtClaimsSet.builder()
-                                    .subject(authentication.getName())
-                                    .issuedAt(Instant.now())
-                                    .expiresAt(Instant.now().plusSeconds(expirySeconds))
-                                    .claim("userId", user.getUserId())
-                                    .claim("roles", authentication.getAuthorities().stream()
-                                            .map(a -> a.getAuthority())
-                                            .toList())
-                                    .build();
-
-                            var jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build();
-                            String token = jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
-
-                            // Redirect to frontend with token instead of returning JSON
-                            String redirectUrl = "http://localhost:3000/oauth2/redirect?token=" + token + "&userId=" + user.getUserId();
+                            String redirectUrl = generateJwtAndRedirect(authentication, jwtEncoder, userRepo);
                             response.sendRedirect(redirectUrl);
                         })
  
@@ -131,7 +113,30 @@ public class SecurityConfig {
 
         return http.build();
     }
+    private String generateJwtAndRedirect(Authentication authentication, JwtEncoder jwtEncoder, UserRepo userRepo) {
+        long expirySeconds = 3600;
 
+        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        String email = oAuth2User.getAttribute("email");
+
+        Users user = userRepo.findByUsername(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .subject(authentication.getName())
+                .issuedAt(Instant.now())
+                .expiresAt(Instant.now().plusSeconds(expirySeconds))
+                .claim("userId", user.getUserId())
+                .claim("roles", authentication.getAuthorities().stream()
+                        .map(a -> a.getAuthority())
+                        .toList())
+                .build();
+
+        var jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build();
+        String token = jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
+
+        return "http://localhost:3000/oauth2/redirect?token=" + token + "&userId=" + user.getUserId();
+    }
     @Bean
     @Profile("test")
     public SecurityFilterChain testSecurityFilterChain(HttpSecurity http) throws Exception {

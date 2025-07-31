@@ -29,10 +29,7 @@ const TasksPage = () => {
     }
   }, [token]);
 
-  useEffect(() => {
-    console.log('Current task state changed:', currentTask);
-  }, [currentTask]);
-
+ 
   const fetchTasks = async () => {
     setLoading(true);
     try {
