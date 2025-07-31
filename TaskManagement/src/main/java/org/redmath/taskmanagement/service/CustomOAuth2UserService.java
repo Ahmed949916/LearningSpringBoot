@@ -38,7 +38,7 @@ public class CustomOAuth2UserService extends  DefaultOAuth2UserService {
 
         Users user = userRepo.findByUsername(email)
                 .orElseGet(() -> {
-                    System.out.println("ℹ️ Saving new user: " + email);
+                    System.out.println(" Saving new user: " + email);
                     Users newUser = new Users();
                     newUser.setUsername(email);
                     newUser.setPassword("");

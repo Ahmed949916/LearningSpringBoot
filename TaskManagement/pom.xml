@@ -28,19 +28,31 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.13</version>
                 <executions>
+                    <!-- Agent that instruments your code -->
                     <execution>
                         <id>prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
+
+
                     <execution>
                         <id>report</id>
                         <phase>prepare-package</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/config/**</exclude>
+
+                                <exclude>**/service/CustomOAuth2UserService.class</exclude>
+
+                            </excludes>
+                        </configuration>
                     </execution>
+
                     <execution>
                         <id>post-unit-test</id>
                         <phase>test</phase>
@@ -48,17 +60,21 @@
                             <goal>report</goal>
                         </goals>
                         <configuration>
-
-
                             <dataFile>target/jacoco.exec</dataFile>
-
                             <outputDirectory>target/my-reports</outputDirectory>
+                            <excludes>
+                                <exclude>**/config/**</exclude>
+
+                                <exclude>**/service/CustomOAuth2UserService.class</exclude>
+
+                            </excludes>
                         </configuration>
                     </execution>
                 </executions>
-
             </plugin>
-        </plugins>
+
+
+</plugins>
     </build>
     <dependencies>
         <dependency>
