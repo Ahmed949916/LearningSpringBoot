@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/your-project/pom.xml">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/your-project/pom.xml" />
+              <option name="originalContent" value="&lt;!-- ...existing code... --&gt;&#10;&lt;dependencies&gt;&#10;    &lt;!-- ...existing code... --&gt;&#10;    &lt;dependency&gt;&#10;        &lt;groupId&gt;org.apache.commons&lt;/groupId&gt;&#10;        &lt;artifactId&gt;commons-lang3&lt;/artifactId&gt;&#10;        &lt;version&gt;3.18.0&lt;/version&gt;&#10;    &lt;/dependency&gt;&#10;    &lt;!-- ...existing code... --&gt;&#10;    &lt;dependency&gt;&#10;        &lt;groupId&gt;com.h2database&lt;/groupId&gt;&#10;        &lt;artifactId&gt;h2&lt;/artifactId&gt;&#10;        &lt;version&gt;2.2.224&lt;/version&gt; &lt;!-- Use the latest stable, non-vulnerable version --&gt;&#10;        &lt;!-- If only used in test, add &lt;scope&gt;test&lt;/scope&gt; --&gt;&#10;    &lt;/dependency&gt;&#10;    &lt;!-- ...existing code... --&gt;&#10;    &lt;dependency&gt;&#10;        &lt;groupId&gt;com.google.code.gson&lt;/groupId&gt;&#10;        &lt;artifactId&gt;gson&lt;/artifactId&gt;&#10;        &lt;version&gt;2.10.2&lt;/version&gt;&#10;    &lt;/dependency&gt;&#10;    &lt;!-- ...existing code... --&gt;&#10;    &lt;dependency&gt;&#10;&#10;" />
+              <option name="updatedContent" value="&lt;!-- ...existing code... --&gt;&#10;&lt;dependencies&gt;&#10;    &lt;!-- ...existing code... --&gt;&#10;    &lt;dependency&gt;&#10;        &lt;groupId&gt;org.apache.commons&lt;/groupId&gt;&#10;        &lt;artifactId&gt;commons-lang3&lt;/artifactId&gt;&#10;        &lt;version&gt;3.18.0&lt;/version&gt;&#10;    &lt;/dependency&gt;&#10;    &lt;!-- ...existing code... --&gt;&#10;    &lt;dependency&gt;&#10;        &lt;groupId&gt;com.h2database&lt;/groupId&gt;&#10;        &lt;artifactId&gt;h2&lt;/artifactId&gt;&#10;        &lt;version&gt;2.2.224&lt;/version&gt; &lt;!-- Use the latest stable, non-vulnerable version --&gt;&#10;        &lt;!-- If only used in test, add &lt;scope&gt;test&lt;/scope&gt; --&gt;&#10;    &lt;/dependency&gt;&#10;    &lt;!-- ...existing code... --&gt;&#10;    &lt;dependency&gt;&#10;        &lt;groupId&gt;com.google.code.gson&lt;/groupId&gt;&#10;        &lt;artifactId&gt;gson&lt;/artifactId&gt;&#10;        &lt;version&gt;2.10.2&lt;/version&gt;&#10;    &lt;/dependency&gt;&#10;    &lt;!-- ...existing code... --&gt;&#10;    &lt;dependency&gt;&#10;&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
