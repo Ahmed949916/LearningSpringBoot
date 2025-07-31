@@ -29,4 +29,6 @@ public class GlobalExceptionHandler {
         response.put("message", ex.getMessage());
         return response;
     }
+
+
 }
