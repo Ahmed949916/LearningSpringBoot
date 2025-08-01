@@ -1,6 +1,0 @@
-org\redmath\taskmanagement\security\WithMockJwt.class
-org\redmath\taskmanagement\controller\UserControllerTest.class
-org\redmath\taskmanagement\security\WithMockJwtSecurityContextFactory.class
-org\redmath\taskmanagement\controller\TaskControllerTest.class
-org\redmath\taskmanagement\service\TaskServiceTest.class
-org\redmath\taskmanagement\service\UserServiceTest.class

@@ -1,5 +1,0 @@
-my:
-  db:
-    username: sa
-    password: sa
-    url: jdbc:h2:mem:taskManagement
