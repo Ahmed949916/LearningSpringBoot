@@ -4,7 +4,7 @@ A simple Spring Boot project created to learn and explore **Spring Boot features
 
 ---
 
-###  Task Management
+###  Task Management App
  
 
 A full-stack task management application that allows users to:
