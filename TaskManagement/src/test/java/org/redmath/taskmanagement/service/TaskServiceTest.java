@@ -1,4 +1,3 @@
-// java
 package org.redmath.taskmanagement.service;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +50,6 @@ public class TaskServiceTest {
     }
 
 
-
     @Test
     public void testGetTasksByUserId() throws Exception {
         Task task2 = new Task();
@@ -69,9 +67,8 @@ public class TaskServiceTest {
     }
 
 
-
     @Test
-    public void testGetTaskById_NotFound() throws Exception {
+    public void testGetTaskById_NotFound()  {
         when(taskRepo.findById(99L)).thenReturn(Optional.empty());
         assertThrows(NoSuchElementException.class, () -> taskService.findById(99L, 1L));
         verify(taskRepo, times(1)).findById(99L);
@@ -79,7 +76,7 @@ public class TaskServiceTest {
 
 
     @Test
-    public void testUpdateTask_NotFound() throws Exception {
+    public void testUpdateTask_NotFound()   {
         when(taskRepo.findById(99L)).thenReturn(Optional.empty());
         Task updatedTask = new Task();
         updatedTask.setTitle("Updated Title");
@@ -89,10 +86,8 @@ public class TaskServiceTest {
     }
 
 
-
-
     @Test
-    public void testDeleteTask_NotFound() throws Exception {
+    public void testDeleteTask_NotFound()   {
         when(taskRepo.findById(99L)).thenReturn(Optional.empty());
         assertThrows(NoSuchElementException.class, () -> taskService.deleteTask(99L, 1L));
         verify(taskRepo, times(1)).findById(99L);
@@ -100,7 +95,7 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void testCreateTask() throws Exception {
+    public void testCreateTask()  {
 
         Users owner = new Users();
         owner.setUserId(1L);
@@ -134,5 +129,54 @@ public class TaskServiceTest {
         verifyNoMoreInteractions(taskRepo, userRepo);
     }
 
+    @Test
+    public void testDeleteTask_Success() throws Exception {
+        Users owner = new Users();
+        owner.setUserId(1L);
+        owner.setUsername("owner@example.com");
+
+        when(userRepo.findById(1L)).thenReturn(Optional.of(owner));
+
+        when(taskRepo.findById(1L)).thenReturn(Optional.of(testTask));
+
+        taskService.deleteTask(1L, 1L);
+
+        verify(taskRepo, times(1)).findById(1L);
+        verify(taskRepo, times(1)).delete(testTask);
+    }
+
+    @Test
+    public void updateTask_OtherUser()   {
+        Users owner = new Users();
+        owner.setUserId(2L);
+        owner.setUsername("owner@example.com");
+        when(userRepo.findById(2L)).thenReturn(Optional.of(owner));
+
+        when(taskRepo.findById(1L)).thenReturn(Optional.of(testTask));
+
+        Task updatedTask = new Task();
+        updatedTask.setTitle("Updated Title");
+
+        Exception exception = assertThrows(java.nio.file.AccessDeniedException.class, () -> taskService.updateTask(1L, updatedTask, 2L));
+        assertEquals("You can only update your own tasks", exception.getMessage());
+
+    }
+
+    @Test
+    public void deleteTask_OtherUser()  {
+        Users owner = new Users();
+        owner.setUserId(2L);
+        owner.setUsername("owner@example.com");
+        when(userRepo.findById(2L)).thenReturn(Optional.of(owner));
+
+        when(taskRepo.findById(1L)).thenReturn(Optional.of(testTask));
+
+        Task updatedTask = new Task();
+        updatedTask.setTitle("Updated Title");
+
+        Exception exception = assertThrows(java.nio.file.AccessDeniedException.class, () -> taskService.deleteTask(1L, 2L));
+        assertEquals("You can only delete your own tasks", exception.getMessage());
+
+    }
 
 }

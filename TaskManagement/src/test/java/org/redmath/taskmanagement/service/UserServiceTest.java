@@ -12,6 +12,7 @@ import org.redmath.taskmanagement.repository.UserRepo;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -80,6 +81,14 @@ public class UserServiceTest {
         verify(userRepo, times(1)).findById(1L);
     }
 
+    @Test
+    public void testGetUserById_NotFound() {
+        when(userRepo.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> userService.getUserById(99L));
+
+        verify(userRepo, times(1)).findById(99L);
+    }
 
 
 

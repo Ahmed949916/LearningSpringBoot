@@ -77,7 +77,7 @@ class TaskControllerTest {
     @WithMockJwt(userId = 1)
     @Test
     public void testDeleteTask() throws Exception {
-        // Create a task to delete
+
         TaskCreateRequest task = new TaskCreateRequest();
         task.setTitle("Task to delete");
         task.setDescription("Will be deleted");
@@ -94,11 +94,11 @@ class TaskControllerTest {
         JsonNode node = objectMapper.readTree(responseBody);
         Long id = node.get("taskId").asLong();
 
-        // Delete the task
+
         mockMvc.perform(delete("/api/task/" + id))
                 .andExpect(status().isNoContent());
 
-        // Verify it's deleted
+
         mockMvc.perform(get("/api/task/" + id))
                 .andExpect(status().isNotFound());
     }
@@ -106,7 +106,7 @@ class TaskControllerTest {
     @WithMockJwt(userId = 1)
     @Test
     public void testUpdateTask() throws Exception {
-        // Create a task to update
+
         TaskCreateRequest createRequest = new TaskCreateRequest();
         createRequest.setTitle("Task to update");
         createRequest.setDescription("Will be updated");
@@ -123,7 +123,7 @@ class TaskControllerTest {
         JsonNode node = objectMapper.readTree(responseBody);
         Long id = node.get("taskId").asLong();
 
-        // Update the task
+
         Task updatedTask = new Task();
         updatedTask.setTitle("Updated Task");
         updatedTask.setDescription("Updated Description");
@@ -159,13 +159,13 @@ class TaskControllerTest {
     @WithMockJwt(userId = 2)
     @Test
     public void testAccessDeniedForDifferentUser() throws Exception {
-        mockMvc.perform(get("/api/task/1")) // Task 1 belongs to user 1
+        mockMvc.perform(get("/api/task/1"))
                 .andExpect(status().isForbidden());
     }
 
     @WithMockJwt(userId = 1, roles = {"ADMIN"})
     @Test
-    public void testAdminAccess() throws Exception {
+    public void testAdminTaskCreation() throws Exception {
 
         TaskCreateRequest task = new TaskCreateRequest();
         task.setTitle("Admin task");
