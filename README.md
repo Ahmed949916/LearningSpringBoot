@@ -19,7 +19,8 @@ A full-stack task management application that allows users to:
 ## 🛠 Tech Stack
 
 **Backend:**
-- Spring Boot 3.x
+- JDK 24
+- Spring Boot 
 - Spring Security
 - JPA/Hibernate
 - JWT Authentication
