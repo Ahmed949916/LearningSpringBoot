@@ -1,4 +1,4 @@
-# 🚀 LearningSpringBoot
+# LearningSpringBoot
 
 A simple Spring Boot project created to learn and explore **Spring Boot features** like REST APIs, dependency injection, and database integration.
 
