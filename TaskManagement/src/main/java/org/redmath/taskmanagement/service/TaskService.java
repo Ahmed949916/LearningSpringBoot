@@ -25,7 +25,6 @@ public class TaskService {
     }
 
     public List<Task> getTasksByUserId(Long userId) throws AccessDeniedException {
-
         return taskRepository.findByOwnerId(userId);
     }
 
@@ -65,13 +64,18 @@ public class TaskService {
             throw new AccessDeniedException("You can only update your own tasks");
         }
 
-        if (req.getTitle() != null) existingTask.setTitle(req.getTitle());
-        if (req.getDescription() != null) existingTask.setDescription(req.getDescription());
-        if (req.getOwnerId() != null) existingTask.setOwnerId(req.getOwnerId());
-        if (req.getCompleted() != null) existingTask.setCompleted(req.getCompleted());
+        updateExistingTaskAsRequested(existingTask, req);
 
         return taskRepository.save(existingTask);
     }
+
+    public void updateExistingTaskAsRequested(Task existingTask, Task req) {
+        if (req.getTitle() != null) existingTask.setTitle(req.getTitle());
+        if (req.getDescription() != null) existingTask.setDescription(req.getDescription());
+        if (req.getCompleted() != null) existingTask.setCompleted(req.getCompleted());
+
+    }
+
 
     public Task findById(Long id, Long userId) throws AccessDeniedException {
         Task task = taskRepository.findById(id).orElseThrow();
