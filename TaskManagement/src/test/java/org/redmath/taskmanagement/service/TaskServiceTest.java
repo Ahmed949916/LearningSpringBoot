@@ -150,8 +150,8 @@ public class TaskServiceTest {
         Users owner = new Users();
         owner.setUserId(2L);
         owner.setUsername("owner@example.com");
-        when(userRepo.findById(2L)).thenReturn(Optional.of(owner));
 
+        when(userRepo.findById(2L)).thenReturn(Optional.of(owner));
         when(taskRepo.findById(1L)).thenReturn(Optional.of(testTask));
 
         Task updatedTask = new Task();

@@ -42,7 +42,6 @@ public class UserServiceTest {
     @Test
     public void testCreateUser() {
         when(userRepo.save(any(Users.class))).thenReturn(testUser);
-
         Users result = userService.createUser(testUser);
 
         assertNotNull(result);
