@@ -106,7 +106,6 @@ public class TaskServiceTest {
 
         when(taskRepo.save(any(Task.class))).thenAnswer(invocation -> {
             Task taskToSave = invocation.getArgument(0);
-
             taskToSave.setTaskId(1L);
             return taskToSave;
         });
@@ -120,7 +119,6 @@ public class TaskServiceTest {
         assertEquals("New Task", createdTask.getTitle());
         assertEquals("New Description", createdTask.getDescription());
         assertEquals(1L, createdTask.getOwnerId());
-
 
         verify(userRepo, times(1)).findById(1L);
         verify(taskRepo, times(1)).save(any(Task.class));
@@ -136,7 +134,6 @@ public class TaskServiceTest {
         owner.setUsername("owner@example.com");
 
         when(userRepo.findById(1L)).thenReturn(Optional.of(owner));
-
         when(taskRepo.findById(1L)).thenReturn(Optional.of(testTask));
 
         taskService.deleteTask(1L, 1L);

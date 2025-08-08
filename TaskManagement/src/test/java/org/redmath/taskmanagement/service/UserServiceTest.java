@@ -58,7 +58,6 @@ public class UserServiceTest {
 
         List<Users> usersList = Arrays.asList(testUser, user2);
         when(userRepo.findAll()).thenReturn(usersList);
-
         List<Users> result = userService.getAllUsers();
 
         assertNotNull(result);
@@ -71,7 +70,6 @@ public class UserServiceTest {
     @Test
     public void testGetUserById_Success() {
         when(userRepo.findById(1L)).thenReturn(Optional.of(testUser));
-
         Users result = userService.getUserById(1L);
 
         assertNotNull(result);
@@ -83,9 +81,7 @@ public class UserServiceTest {
     @Test
     public void testGetUserById_NotFound() {
         when(userRepo.findById(99L)).thenReturn(Optional.empty());
-
         assertThrows(NoSuchElementException.class, () -> userService.getUserById(99L));
-
         verify(userRepo, times(1)).findById(99L);
     }
 
