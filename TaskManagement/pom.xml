@@ -41,7 +41,7 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.13</version>
                 <executions>
-                    <!-- Agent that instruments your code -->
+
                     <execution>
                         <id>prepare-agent</id>
                         <goals>
