@@ -13,7 +13,7 @@ A full-stack task management application that allows users to:
 
     Create, view, update, and delete personal tasks
 
-    Access only their own tasks (data privacy ensured)
+    Access only their own tasks (data privacy ensured.  )
  
  
 ## 🛠 Tech Stack
