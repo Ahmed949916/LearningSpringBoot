@@ -7,7 +7,7 @@ A simple Spring Boot repo created to learn and explore **Spring Boot**
 ###  Task Management App
  
 
-A full-stack task management application that allows users to:
+A full stack task management application that allows users to:
 
     Register and log in securely
 
