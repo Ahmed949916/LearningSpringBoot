@@ -1,15 +1,27 @@
-import { createContext, useContext, useState } from 'react';
+
+import { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { fetchCsrfToken } from '../services/api';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [userId, setUserId] = useState(localStorage.getItem('userId'));
- 
   const navigate = useNavigate();
 
+   
+  useEffect(() => {
+    const initializeCsrfToken = async () => {
+      try {
+        await fetchCsrfToken();
+      } catch (error) {
+        console.error('Failed to initialize CSRF token:', error);
+      }
+    };
+    initializeCsrfToken();
+  }, []);
   const loginWithGoogle = () => {
     window.location.href = 'http://localhost:8080/oauth2/authorization/google';
   };

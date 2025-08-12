@@ -1,18 +1,48 @@
+ 
 import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:8080/api';
 
+ 
 const api = axios.create({
   baseURL: API_BASE_URL,
+  withCredentials: true,  
 });
 
-// Request interceptor to add auth token
+let csrfToken = null;
+
+ 
+export const fetchCsrfToken = async () => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/csrf`, { 
+      withCredentials: true 
+    });
+    csrfToken = response.data.token;
+    console.log('CSRF Token fetched:', csrfToken);
+    return csrfToken;
+  } catch (error) {
+    console.error('Error fetching CSRF token:', error);
+    throw error;
+  }
+};
+
+ 
 api.interceptors.request.use(
-  (config) => {
+  async (config) => {
+    
     const token = localStorage.getItem('token');
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
+    
+     
+    if (['post', 'put', 'patch', 'delete'].includes(config.method.toLowerCase())) {
+      if (!csrfToken) {
+        await fetchCsrfToken();
+      }
+      config.headers['X-XSRF-TOKEN'] = csrfToken;
+    }
+    
     return config;
   },
   (error) => {
@@ -20,19 +50,7 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor to handle 401 errors
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      window.location.href = '/login';
-    }
-    return Promise.reject(error);
-  }
-);
-
-
+ 
  
 export const register = async (userData) => {
   const response = await api.post('/api/user/register', userData);
