@@ -1,5 +1,6 @@
 package org.redmath.taskmanagement.controller;
 import lombok.extern.slf4j.Slf4j;
+import org.redmath.taskmanagement.entity.UserProfileDto;
 import org.redmath.taskmanagement.entity.Users;
 import org.redmath.taskmanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +37,15 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public Users getCurrentUser(@AuthenticationPrincipal Jwt jwt) throws AccessDeniedException {
+    public UserProfileDto getCurrentUser(@AuthenticationPrincipal Jwt jwt) throws AccessDeniedException {
         Long userId = jwt.getClaim("userId");
         if (userId == null) {
             throw new AccessDeniedException("User not authenticated");
         }
-        return userService.getUserById(userId);
+        Users user = userService.getUserById(userId);
+        String googlePhotoLink = jwt.getClaim("picture");
+        log.info("User roles: {}", (Object) jwt.getClaim("picture"));
+        return new UserProfileDto(user, googlePhotoLink);
     }
 
 

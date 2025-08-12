@@ -12,14 +12,17 @@ import {
 
 const Profile = () => {
   const [user, setUser] = useState(null);
+  const [photoLink, setPhotoLink] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const data = await getSelf();
-        console.log('User data:', data);
-        setUser(data);
+       
+        setUser(data.user);
+        setPhotoLink(data.photoLink);
+      
       } catch (err) {
         setError('Failed to fetch user profile');
       }
@@ -51,18 +54,20 @@ const Profile = () => {
           background: '#f9f9f9'
         }}
       >
-        <Avatar 
-          sx={{ 
-            bgcolor: '#1976d2', 
-            width: 80, 
-            height: 80, 
-            fontSize: 28, 
-            margin: 'auto', 
-            mb: 1 
-          }}
-        >
-          
-        </Avatar>
+    <Avatar 
+  src={photoLink}  
+  alt={user.username}     
+  sx={{ 
+    bgcolor: '#1976d2', 
+    width: 80, 
+    height: 80, 
+    fontSize: 28, 
+    margin: 'auto', 
+    mb: 1 
+  }}
+>
+  {(!photoLink && user.name) ? user.name.charAt(0) : null}
+</Avatar>
 
         <CardContent>
           <Typography variant="h5" fontWeight="bold">

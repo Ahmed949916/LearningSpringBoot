@@ -148,6 +148,7 @@ public class SecurityConfig {
                 .issuedAt(Instant.now())
                 .expiresAt(Instant.now().plusSeconds(expirySeconds))
                 .claim("userId", user.getUserId())
+                .claim("picture", oAuth2User.getAttribute("picture"))
                 .claim("roles", authentication.getAuthorities().stream()
                         .map(a -> a.getAuthority())
                         .toList())
