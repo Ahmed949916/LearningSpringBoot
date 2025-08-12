@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
  
 import { 
   Box,  Typography, Table, TableBody, TableCell, 
@@ -22,6 +22,7 @@ const TasksPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const currentTaskRef = useRef({ title: '', description: '', completed: false }); 
 
   useEffect(() => {
     if (token) {
@@ -43,58 +44,41 @@ const TasksPage = () => {
   };
 
   const handleOpenDialog = (task = null) => {
-    if (task) {
-      setCurrentTask(task);
-      setIsEdit(true);
-    } else {
-      setCurrentTask({ title: '', description: '', completed: false });
-      setIsEdit(false);
-    }
+    currentTaskRef.current = task 
+      ? { ...task } 
+      : { title: '', description: '', completed: false };
+    setIsEdit(!!task);
     setOpenDialog(true);
-  };
-
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    console.log('Input change:', name, value);
     if (name === 'completed') {
-      const booleanValue = value === 'true';
-      console.log('Converting completed value:', value, '→', booleanValue);
-      setCurrentTask(prev => {
-        const updated = { ...prev, [name]: booleanValue };
-        console.log('Updated task state:', updated);
-        return updated;
-      });
+      currentTaskRef.current[name] = value === 'true';
     } else {
-      setCurrentTask(prev => ({ ...prev, [name]: value }));
+      currentTaskRef.current[name] = value;
     }
   };
 
   const handleSubmit = async () => {
     setLoading(true);
     try {
-     
       if (isEdit) {
-        
-        await updateTask(currentTask.taskId, currentTask);
+        await updateTask(currentTaskRef.current.taskId, currentTaskRef.current);
         setSuccess('Task updated successfully');
       } else {
-        
-        await createTask(currentTask);
+        await createTask(currentTaskRef.current);
         setSuccess('Task created successfully');
       }
       fetchTasks();
-      handleCloseDialog();
-    } catch (error) {
-      console.error('Submit error:', error);
+      setOpenDialog(false);
+    } catch {
       setError(isEdit ? 'Failed to update task' : 'Failed to create task');
     } finally {
       setLoading(false);
     }
   };
+
 
   const handleDelete = async (id) => {
     setLoading(true);
@@ -186,8 +170,8 @@ const TasksPage = () => {
 
  
 
-      <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogTitle sx={{  color:"#4A9782" }}>{isEdit ? 'Edit Task' : 'Add Task'}</DialogTitle>
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+        <DialogTitle>{isEdit ? 'Edit Task' : 'Add Task'}</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -196,11 +180,9 @@ const TasksPage = () => {
             label="Title"
             type="text"
             fullWidth
-          
             variant="standard"
-            value={currentTask.title}
+            defaultValue={currentTaskRef.current.title}
             onChange={handleInputChange}
-            disabled={loading}
           />
           <TextField
             margin="dense"
@@ -211,18 +193,15 @@ const TasksPage = () => {
             variant="standard"
             multiline
             rows={4}
-            value={currentTask.description}
+            defaultValue={currentTaskRef.current.description}
             onChange={handleInputChange}
-            disabled={loading}
           />
           <FormControl fullWidth margin="dense" variant="standard">
-            <InputLabel id="status-label">Status</InputLabel>
+            <InputLabel>Status</InputLabel>
             <Select
-              labelId="status-label"
               name="completed"
-              value={currentTask.completed ? 'true' : 'false'}
+              defaultValue={currentTaskRef.current.completed ? 'true' : 'false'}
               onChange={handleInputChange}
-              disabled={loading}
             >
               <MenuItem value="false">Pending</MenuItem>
               <MenuItem value="true">Completed</MenuItem>
@@ -230,12 +209,12 @@ const TasksPage = () => {
           </FormControl>
         </DialogContent>
         <DialogActions>
-          <CustomButton onClick={handleCloseDialog} disabled={loading}>
+          <CustomButton onClick={() => setOpenDialog(false)} disabled={loading}>
             Cancel
           </CustomButton>
-        <CustomButton onClick={handleSubmit} disabled={loading}>
-          {loading ? <CircularProgress size={24} /> : isEdit ? 'Update' : 'Create'}
-        </CustomButton>
+          <CustomButton onClick={handleSubmit} disabled={loading}>
+            {loading ? <CircularProgress size={24} /> : isEdit ? 'Update' : 'Create'}
+          </CustomButton>
         </DialogActions>
       </Dialog>
     </Box>
