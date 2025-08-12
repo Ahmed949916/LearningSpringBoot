@@ -119,7 +119,6 @@ export const deleteUser = async (id) => {
 
 export const getSelf = async () => {
   const response = await api.get('/user/profile');
- 
   return response.data;
 };
 

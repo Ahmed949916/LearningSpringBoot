@@ -19,9 +19,11 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
@@ -31,6 +33,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import javax.crypto.spec.SecretKeySpec;
 import java.time.Instant;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.security.core.Authentication;
 
 
@@ -40,7 +44,7 @@ import org.springframework.security.core.Authentication;
         security = @SecurityRequirement(name = "bearerAuth")
 )
 @SecurityScheme(name = "bearerAuth", type = SecuritySchemeType.HTTP, bearerFormat = "JWT", scheme = "bearer")
-@EnableMethodSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     @Value("${jwt.signing.key}")
@@ -59,7 +63,20 @@ public class SecurityConfig {
         SecretKeySpec secretKey = new SecretKeySpec(signingKey.getBytes(), "HmacSHA256");
         return new NimbusJwtEncoder(new ImmutableSecret<>(secretKey));
     }
-
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(jwt -> {
+            List<String> roles = jwt.getClaimAsStringList("roles");
+            if (roles == null) {
+                return List.of();
+            }
+            return roles.stream()
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+        });
+        return converter;
+    }
     @Bean
     public JwtDecoder jwtDecoder() {
         SecretKeySpec secretKey = new SecretKeySpec(signingKey.getBytes(), "HmacSHA256");
@@ -95,12 +112,14 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/login/oauth2/**", "/oauth2/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/api/task/**").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/api/user/**").hasRole("ADMIN")
+                        .requestMatchers("/api/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt.decoder(jwtDecoder()))
+                        .jwt(jwt -> jwt
+                                .decoder(jwtDecoder())
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter())
+                        )
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))

@@ -1,4 +1,5 @@
 package org.redmath.taskmanagement.controller;
+import lombok.extern.slf4j.Slf4j;
 import org.redmath.taskmanagement.entity.Users;
 import org.redmath.taskmanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
+@Slf4j
 public class UserController {
     private final UserService userService;
 
@@ -51,9 +53,8 @@ public class UserController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteUser(@PathVariable Long id) {
+    public void deleteUser(@PathVariable Long id, @AuthenticationPrincipal Jwt jwt) throws AccessDeniedException {
+        log.info("User roles: {}", (Object) jwt.getClaim("roles"));
         userService.deleteUser(id);
-
-
     }
 }
