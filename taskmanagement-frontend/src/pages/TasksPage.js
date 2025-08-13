@@ -100,13 +100,7 @@ const TasksPage = () => {
       </Box>
     );
   }
-  if (tasks.length === 0) {
-    return (
-      <Box sx={{ p: 3 }}>
-        <Typography variant="h6">No tasks available</Typography>
-      </Box>
-    );
-  }
+  
  
   return (
     <Box sx={{ p: 3 }}>
@@ -147,6 +141,7 @@ const TasksPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
+              
               {tasks.map((task) => (
                 <TableRow key={task.taskId}>
                   <TableCell>{task.title}</TableCell>
@@ -170,6 +165,9 @@ const TasksPage = () => {
                   </TableCell>
                 </TableRow>
               ))}
+
+
+              
             </TableBody>
           </Table>
         </TableContainer>
