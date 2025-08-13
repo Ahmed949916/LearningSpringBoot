@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5933c43f-1f89-42cf-bd9c-b169a15511b2" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/redmath/taskmanagement/controller/TaskControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/redmath/taskmanagement/controller/TaskControllerTest.java" afterDir="false" />
+    <list default="true" id="5933c43f-1f89-42cf-bd9c-b169a15511b2" name="Changes" comment="refactor:updated to latest versions">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/redmath/taskmanagement/controller/TaskController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/redmath/taskmanagement/controller/TaskController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/redmath/taskmanagement/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/redmath/taskmanagement/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/redmath/taskmanagement/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/redmath/taskmanagement/service/UserService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,22 +18,22 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "Ahmed949916"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Ahmed949916&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Ahmed949916/LearningSpringBoot.git",
-    "accountId": "02bc1acd-a7bc-402d-b543-1145ea74a2e4"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Ahmed949916/LearningSpringBoot.git&quot;,
+    &quot;accountId&quot;: &quot;02bc1acd-a7bc-402d-b543-1145ea74a2e4&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 2
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="30UPI7alCYMMA1YoBNh6AOz0Clz" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -39,13 +41,55 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Maven.TaskManagement [clean].executor": "Run",
+    "Maven.TaskManagement [install].executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.Main.executor": "Run",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/ahmad.abdullah/IdeaProjects/TaskManagement"
+    "last_opened_file_path": "C:/Users/ahmad.abdullah/IdeaProjects/TaskManagement",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration name="Main" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="TaskManagement" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.redmath.taskmanagement.Main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.redmath.taskmanagement.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Spring Boot.Main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.26927.53" />
+        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-IU-251.26927.53" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="5933c43f-1f89-42cf-bd9c-b169a15511b2" name="Changes" comment="" />
@@ -53,7 +97,42 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1753679095897</updated>
+      <workItem from="1755060855904" duration="8201000" />
     </task>
+    <task id="LOCAL-00001" summary="refactor:task frontend">
+      <option name="closed" value="true" />
+      <created>1755061260561</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1755061260561</updated>
+    </task>
+    <task id="LOCAL-00002" summary="refactor: task page frontend">
+      <option name="closed" value="true" />
+      <created>1755061617549</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1755061617549</updated>
+    </task>
+    <task id="LOCAL-00003" summary="refactor:updated to latest versions">
+      <option name="closed" value="true" />
+      <created>1755066336308</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1755066336308</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="refactor:task frontend" />
+    <MESSAGE value="refactor: task page frontend" />
+    <MESSAGE value="refactor:updated to latest versions" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor:updated to latest versions" />
   </component>
 </project>

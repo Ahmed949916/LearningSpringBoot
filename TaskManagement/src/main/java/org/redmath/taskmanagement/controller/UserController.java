@@ -36,29 +36,23 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+
+
     @GetMapping("/profile")
     public UserProfileDto getCurrentUser(@AuthenticationPrincipal Jwt jwt) throws AccessDeniedException {
-        Long userId = jwt.getClaim("userId");
-        if (userId == null) {
-            throw new AccessDeniedException("User not authenticated");
-        }
-        Users user = userService.getUserById(userId);
-        String googlePhotoLink = jwt.getClaim("picture");
-        log.info("User roles: {}", (Object) jwt.getClaim("picture"));
-        return new UserProfileDto(user, googlePhotoLink);
+        return userService.getProfileFromJwt(jwt);
     }
-
 
     @GetMapping("/{id}")
     public Users getUserById(@PathVariable  Long id){
         return userService.getUserById(id);
     }
 
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteUser(@PathVariable Long id, @AuthenticationPrincipal Jwt jwt) throws AccessDeniedException {
-        log.info("User roles: {}", (Object) jwt.getClaim("roles"));
         userService.deleteUser(id);
     }
 }

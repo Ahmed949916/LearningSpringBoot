@@ -46,7 +46,7 @@ public class TaskController {
     @GetMapping
     public List<Task> getTasksByUserId(@AuthenticationPrincipal Jwt jwt) throws AccessDeniedException {
         Long userId = jwt.getClaim("userId");
-        String username = jwt.getClaim("username");
+
         return taskService.getTasksByUserId(userId);
     }
 
