@@ -17,7 +17,7 @@ const TasksPage = () => {
   const { token } = useAuth();
   const [tasks, setTasks] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
-  const [currentTask, setCurrentTask] = useState({ title: '', description: '', completed: false });
+  
   const [isEdit, setIsEdit] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -97,6 +97,13 @@ const TasksPage = () => {
     return (
       <Box sx={{ p: 3 }}>
         <Typography variant="h6">Please login to view tasks</Typography>
+      </Box>
+    );
+  }
+  if (tasks.length === 0) {
+    return (
+      <Box sx={{ p: 3 }}>
+        <Typography variant="h6">No tasks available</Typography>
       </Box>
     );
   }
