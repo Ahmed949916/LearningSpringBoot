@@ -6,26 +6,15 @@ import {
   TableContainer, TableHead, TableRow, Paper, IconButton
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { deleteUser } from '../services/api.js';
+import { deleteUser, getUsers } from '../services/api.js';
 
 const UsersPage = () => {
   const { token } = useAuth();
   const [users, setUsers] = useState([]);
- const fetchUsers = async () => {
-    try {
-      const response = await axios.get('http://localhost:8080/api/user', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setUsers(response.data);
-    } catch (error) {
-      console.error('Error fetching users:', error);
-    }
-  };
+ 
   useEffect(() => {
     if (token) {
-      fetchUsers();
+      getUsers().then(setUsers);
     }
     // eslint-disable-next-line
   }, [token]);
@@ -35,7 +24,7 @@ const UsersPage = () => {
   const handleDelete = async (id) => {
     try {
      await deleteUser(id);
-      fetchUsers();
+      getUsers().then(setUsers);
     } catch (error) {
       console.error('Error deleting user:', error);
     }
@@ -71,7 +60,7 @@ const UsersPage = () => {
                 <TableCell>{user.role}</TableCell>
                 <TableCell>
                   <IconButton onClick={() => handleDelete(user.userId)}>
-                    <DeleteIcon />
+                    <DeleteIcon sx={{ color: 'error.main' }} />
                   </IconButton>
                 </TableCell>
               </TableRow>
