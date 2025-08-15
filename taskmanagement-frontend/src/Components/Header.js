@@ -10,17 +10,20 @@ const Header = () => {
   const [userRole, setUserRole] = useState('ROLE_USER');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { token, logout } = useAuth();
+  console.log(userRole)
 
   useEffect(() => {
     const fetchUserData = async () => {
       if (token) {
         try {
           const userData = await getSelf();
-          if (userData && userData.email) {
-            setUserEmail(userData.email);
+          
+         
+          if (userData && userData.user.email) {
+            setUserEmail(userData.user.email);
           }
-          if (userData && userData.role) {
-            setUserRole(userData.role);
+          if (userData && userData.user.role) {
+            setUserRole(userData.user.role);
           }
         } catch (error) {
           console.error('Failed to fetch user data:', error);
@@ -79,7 +82,10 @@ const Header = () => {
                 <nav>
                     <ul className="mobile-nav-links">
                         <li><Link to="/tasks" onClick={closeMobileMenu}>Tasks</Link></li>
-                        {/* <li><Link to="/users" onClick={closeMobileMenu}>Users</Link></li> */}
+                        { userRole === 'ROLE_ADMIN' && (
+                            <li><Link to="/users" onClick={closeMobileMenu}>Users</Link></li>
+                        )}
+                         
                         <li><Link to="/profile" onClick={closeMobileMenu}>Profile</Link></li>
                     </ul>
                 </nav>
