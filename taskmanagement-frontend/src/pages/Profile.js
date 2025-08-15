@@ -14,7 +14,7 @@ const Profile = () => {
   useEffect(() => {
     (async () => {
       try {
-        const data = await getSelf(); // { user, photoLink }
+        const data = await getSelf(); 
         setUser(data.user);
         setPhotoLink(data.photoLink || null);
       } catch {
@@ -23,7 +23,7 @@ const Profile = () => {
     })();
   }, []);
 
-  // Keep avatarSrc in sync with the latest photoLink
+ 
   useEffect(() => {
     setAvatarSrc(photoLink || undefined);
   }, [photoLink]);
@@ -37,7 +37,7 @@ const Profile = () => {
     );
   }
 
-  // Derive a display name & initials from email if needed
+
   const email = user.username || '';
   const displayName = email.includes('@') ? email.split('@')[0] : email;
   const initials = displayName ? displayName.charAt(0).toUpperCase() : '?';
@@ -57,7 +57,7 @@ const Profile = () => {
             referrerPolicy: 'no-referrer',
             loading: 'lazy',
             crossOrigin: 'anonymous',
-            onError: () => setAvatarSrc(undefined) // fallback to initials
+            onError: () => setAvatarSrc(undefined) 
           }}
           sx={{ bgcolor: '#1976d2', width: 80, height: 80, fontSize: 28, m: 'auto', mb: 1 }}
         >
