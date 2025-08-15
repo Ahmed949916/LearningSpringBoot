@@ -130,14 +130,14 @@ const TasksPage = () => {
           <CircularProgress />
         </Box>
       ) : (
-        <TableContainer component={Paper}>
+        <TableContainer >
           <Table>
             <TableHead>
               <TableRow  sx={{ backgroundColor: '#fffcf4ff' }}>
-                <TableCell>Title</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell>Actions</TableCell>
-                <TableCell>Status</TableCell>
+                <TableCell sx={{fontWeight:"bold"}}>Title</TableCell>
+                <TableCell sx={{fontWeight:"bold"}}>Description</TableCell>
+                <TableCell sx={{fontWeight:"bold"}}>Actions</TableCell>
+                <TableCell sx={{fontWeight:"bold"}}>Status</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

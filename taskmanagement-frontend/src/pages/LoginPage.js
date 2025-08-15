@@ -19,9 +19,10 @@ const LoginPage = () => {
     >
       <Box
         sx={{
+          transform: { xs: "translateY(0)", md: "translateY(-30%)" },
           height: { xs: "100vh", md: "auto",sm:"50vh" },
           width: { xs: "100%", sm:  "100%" },
-          maxWidth: { lg: 600, md: 500 ,sm:400},
+          maxWidth: { lg: 700, md: 600 ,sm:500},
           backgroundColor: "#fff",
           borderRadius: { xs: 0, sm: 6 },
           display: "flex",
@@ -53,7 +54,7 @@ const LoginPage = () => {
             variant="outlined"
             startIcon={<GoogleIcon sx={{ color: '#4285F4' }} />}
             onClick={loginWithGoogle}
-            sx={{ mt: 2, color: '#4285F4', border: '2px solid #4285F4', fontWeight: 'bold' }}
+            sx={{ mt: 2, color: '#4285F4', border: '1px solid #4285F4', fontWeight: '500' }}
             >
             Sign in with Google
           </Button>
