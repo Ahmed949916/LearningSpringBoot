@@ -147,22 +147,23 @@ const TasksPage = () => {
                   <TableCell>{task.title}</TableCell>
                   <TableCell>{task.description}</TableCell>
                   <TableCell>
+                    {task.completed ? 'Completed' : 'Pending'}
+                  </TableCell>
+                  <TableCell>
                     <IconButton 
                       onClick={() => handleOpenDialog(task)}
                       disabled={loading}
                     >
-                      <EditIcon />
+                      <EditIcon sx={{ color: 'primary.main' }}/>
                     </IconButton>
                     <IconButton 
                       onClick={() => handleDelete(task.taskId)}
                       disabled={loading}
                     >
-                      <DeleteIcon />
+                      <DeleteIcon  sx={{ color: 'error.main' }}/>
                     </IconButton>
                   </TableCell>
-                  <TableCell>
-                    {task.completed ? 'Completed' : 'Pending'}
-                  </TableCell>
+                  
                 </TableRow>
               ))}
 
