@@ -13,27 +13,17 @@ import java.util.Collections;
 
 @Service
 public class CustomOAuth2UserService extends  DefaultOAuth2UserService {
-
     private final UserRepo userRepo;
-
     public CustomOAuth2UserService(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
 
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-
-
         OAuth2User oAuth2User = super.loadUser(userRequest);
-
-
         String email = oAuth2User.getAttribute("email");
         if (email == null) {
             throw new OAuth2AuthenticationException("Email not found from OAuth2 provider");
         }
-
-        System.out.println(" Google attributes: " + oAuth2User.getAttributes());
-
-
         Users user = userRepo.findByUsername(email)
                 .orElseGet(() -> {
                     System.out.println(" Saving new user: " + email);
@@ -43,8 +33,6 @@ public class CustomOAuth2UserService extends  DefaultOAuth2UserService {
                     newUser.setRole("ROLE_USER");
                     return userRepo.save(newUser);
                 });
-
-
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(user.getRole())),
                 oAuth2User.getAttributes(),

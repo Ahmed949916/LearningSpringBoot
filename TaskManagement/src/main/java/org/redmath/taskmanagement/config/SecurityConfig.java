@@ -1,11 +1,6 @@
 package org.redmath.taskmanagement.config;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
-import io.swagger.v3.oas.annotations.info.Info;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.redmath.taskmanagement.entity.Users;
 import org.redmath.taskmanagement.repository.UserRepo;
 import org.redmath.taskmanagement.service.*;
@@ -14,11 +9,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -27,25 +22,19 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import javax.crypto.spec.SecretKeySpec;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.security.core.Authentication;
 
 
 @Configuration
-@OpenAPIDefinition(
-        info = @Info(title = "News API", version = "v1"),
-        security = @SecurityRequirement(name = "bearerAuth")
-)
-@SecurityScheme(name = "bearerAuth", type = SecuritySchemeType.HTTP, bearerFormat = "JWT", scheme = "bearer")
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
+
+    @Value("${app.frontend.base-url:}")
+    private String frontendBaseUrl;
 
     @Value("${jwt.signing.key}")
     private String signingKey;
@@ -96,12 +85,12 @@ public class SecurityConfig {
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/api/public/**").permitAll()
-                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                        .requestMatchers("/login/oauth2/**", "/oauth2/**").permitAll()
-                        .requestMatchers("/api/csrf").permitAll()
+                        .requestMatchers(
+                                "/", "/api/public/**", "/api/csrf",
+                                "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
+                                "/login/oauth2/**", "/oauth2/**"
+                        ).permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/api/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
@@ -116,7 +105,7 @@ public class SecurityConfig {
                             String redirectUrl = generateJwtAndRedirect(authentication, jwtEncoder, userRepo);
                             response.sendRedirect(redirectUrl);
                         })
- 
+
                 )
                 .logout(logout -> logout.logoutSuccessUrl("/").permitAll())
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
@@ -139,14 +128,14 @@ public class SecurityConfig {
                 .claim("userId", user.getUserId())
                 .claim("picture", oAuth2User.getAttribute("picture"))
                 .claim("roles", authentication.getAuthorities().stream()
-                        .map(a -> a.getAuthority())
+                        .map(GrantedAuthority::getAuthority)
                         .toList())
                 .build();
 
         var jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build();
         String token = jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
 
-        return "http://localhost:3000/oauth2/redirect?token=" + token + "&userId=" + user.getUserId();
+        return frontendBaseUrl+"/oauth2/redirect?token=" + token + "&userId=" + user.getUserId();
     }
     @Bean
     @Profile("test")

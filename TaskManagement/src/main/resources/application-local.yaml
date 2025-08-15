@@ -3,3 +3,6 @@ my:
     username: sa
     password: sa
     url: jdbc:h2:mem:taskManagement
+app:
+  frontend:
+    base-url: http://localhost:3000
