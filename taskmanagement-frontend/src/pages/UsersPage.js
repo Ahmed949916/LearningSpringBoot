@@ -11,14 +11,7 @@ import { deleteUser } from '../services/api.js';
 const UsersPage = () => {
   const { token } = useAuth();
   const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    if (token) {
-      fetchUsers();
-    }
-  }, [token]);
-
-  const fetchUsers = async () => {
+ const fetchUsers = async () => {
     try {
       const response = await axios.get('http://localhost:8080/api/user', {
         headers: {
@@ -30,10 +23,18 @@ const UsersPage = () => {
       console.error('Error fetching users:', error);
     }
   };
+  useEffect(() => {
+    if (token) {
+      fetchUsers();
+    }
+    // eslint-disable-next-line
+  }, [token]);
+
+ 
 
   const handleDelete = async (id) => {
     try {
-      const response = await deleteUser(id);
+     await deleteUser(id);
       fetchUsers();
     } catch (error) {
       console.error('Error deleting user:', error);

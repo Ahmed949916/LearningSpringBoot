@@ -1,124 +1,59 @@
- 
+
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8080/api';
 
- 
+const API_ORIGIN =
+  process.env.REACT_APP_API_BASE_URL?.replace(/\/$/, '') || ''; 
+
+
+const API_BASE_URL = `${API_ORIGIN}/api`;
+
+
 const api = axios.create({
   baseURL: API_BASE_URL,
-  withCredentials: true,  
+  withCredentials: true,
 });
 
 let csrfToken = null;
 
- 
 export const fetchCsrfToken = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/csrf`, { 
-      withCredentials: true 
-    });
-    csrfToken = response.data.token;
+    const res = await axios.get(`${API_BASE_URL}/csrf`, { withCredentials: true });
+    csrfToken = res.data?.token || res.headers['x-xsrf-token'] || null;
     return csrfToken;
-  } catch (error) {
-    console.error('Error fetching CSRF token:', error);
-    throw error;
+  } catch (err) {
+    console.error('Error fetching CSRF token:', err);
+    throw err;
   }
 };
 
- 
+
 api.interceptors.request.use(
   async (config) => {
-    
     const token = localStorage.getItem('token');
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+    if (token) config.headers['Authorization'] = `Bearer ${token}`;
+
+    if (['post', 'put', 'patch', 'delete'].includes((config.method || '').toLowerCase())) {
+      if (!csrfToken) await fetchCsrfToken();
+      if (csrfToken) config.headers['X-XSRF-TOKEN'] = csrfToken;
     }
-    
-     
-    if (['post', 'put', 'patch', 'delete'].includes(config.method.toLowerCase())) {
-      if (!csrfToken) {
-        await fetchCsrfToken();
-      }
-      config.headers['X-XSRF-TOKEN'] = csrfToken;
-    }
-    
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
- 
- 
-export const register = async (userData) => {
-  const response = await api.post('/api/user/register', userData);
-  return response.data;
-};
-export const login = async (username, password) => {
-  try {
- 
-    const authAxios = axios.create();
-    
-    const response = await authAxios.post(
-      'http://localhost:8080/perform_login',
-      new URLSearchParams({ username, password }).toString(),
-      {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        withCredentials: true
-      }
-    );
-    if (response.status === 200 && response.data.access_token) {
-      localStorage.setItem('token', response.data.access_token);
-      // Set default Authorization header for future requests
-      axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access_token}`;
-      return response.data;
-    }
-    throw new Error('Authentication failed');
-  } catch (error) {
-    console.error('Login error:', error);
-    throw error;
-  }
-};
 
 
-export const logout = async () => {
-  return api.post('/perform_logout');
-};
+export const logout = async () => api.post('/perform_logout');
 
-export const getTasks = async () => {
-  const response = await api.get('/task');
-  return response.data;
-};
+export const getTasks = async () => (await api.get('/task')).data;
+export const createTask = async (taskData) => (await api.post('/task', taskData)).data;
+export const updateTask = async (id, taskData) => (await api.patch(`/task/${id}`, taskData)).data;
+export const deleteTask = async (id) => api.delete(`/task/${id}`);
 
-export const createTask = async (taskData) => {
-  const response = await api.post('/task', taskData);
-  return response.data;
-};
+export const getUsers = async () => (await api.get('/user')).data;
+export const deleteUser = async (id) => api.delete(`/user/${id}`);
 
-export const updateTask = async (id, taskData) => {
-  const response = await api.patch(`/task/${id}`, taskData);
-  return response.data;
-};
-
-export const deleteTask = async (id) => {
-  return api.delete(`/task/${id}`);
-};
-
-export const getUsers = async () => {
-  const response = await api.get('/user');
-  return response.data;
-};
-
-export const deleteUser = async (id) => {
-  return api.delete(`/user/${id}`);
-};
-
-export const getSelf = async () => {
-  const response = await api.get('/user/profile');
-  return response.data;
-};
+export const getSelf = async () => (await api.get('/user/profile')).data;
 
 export default api;

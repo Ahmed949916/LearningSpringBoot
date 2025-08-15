@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5933c43f-1f89-42cf-bd9c-b169a15511b2" name="Changes" comment="refactor:updated to latest versions">
+    <list default="true" id="5933c43f-1f89-42cf-bd9c-b169a15511b2" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/redmath/taskmanagement/controller/TaskController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/redmath/taskmanagement/controller/TaskController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/redmath/taskmanagement/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/redmath/taskmanagement/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/redmath/taskmanagement/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/redmath/taskmanagement/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../taskmanagement-frontend/src/pages/Profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/../taskmanagement-frontend/src/pages/Profile.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,7 +95,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1753679095897</updated>
-      <workItem from="1755060855904" duration="8201000" />
+      <workItem from="1755060855904" duration="10640000" />
     </task>
     <task id="LOCAL-00001" summary="refactor:task frontend">
       <option name="closed" value="true" />
@@ -123,7 +121,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755066336308</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="refactor:split profile controller">
+      <option name="closed" value="true" />
+      <created>1755083027322</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1755083027322</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -133,6 +139,7 @@
     <MESSAGE value="refactor:task frontend" />
     <MESSAGE value="refactor: task page frontend" />
     <MESSAGE value="refactor:updated to latest versions" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor:updated to latest versions" />
+    <MESSAGE value="refactor:split profile controller" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor:split profile controller" />
   </component>
 </project>

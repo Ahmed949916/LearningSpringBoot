@@ -45,7 +45,7 @@ const LoginPage = () => {
       <Typography variant="h4" component="h1" align="center" gutterBottom>
         Welcome to Task Management
       </Typography>
-      <Typography variant="body1" align="center" sx={{ mb: 3 }}>
+      <Typography variant="body1" align="center" sx={{ mb: 2 }}>
         Please sign in with your Google account
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -53,7 +53,7 @@ const LoginPage = () => {
             variant="outlined"
             startIcon={<GoogleIcon sx={{ color: '#4285F4' }} />}
             onClick={loginWithGoogle}
-            sx={{ mt: 2, color: '#4285F4', borderColor: '#4285F4' }}
+            sx={{ mt: 2, color: '#4285F4', border: '2px solid #4285F4', fontWeight: 'bold' }}
             >
             Sign in with Google
           </Button>

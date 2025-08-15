@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { fetchCsrfToken } from '../services/api';
 
+const API_ORIGIN =
+  (process.env.REACT_APP_API_BASE_URL?.replace(/\/$/, '')) || '';
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -11,19 +14,15 @@ export const AuthProvider = ({ children }) => {
   const [userId, setUserId] = useState(localStorage.getItem('userId'));
   const navigate = useNavigate();
 
-   
   useEffect(() => {
-    const initializeCsrfToken = async () => {
-      try {
-        await fetchCsrfToken();
-      } catch (error) {
-        console.error('Failed to initialize CSRF token:', error);
-      }
-    };
-    initializeCsrfToken();
+    (async () => {
+      try { await fetchCsrfToken(); } 
+      catch (e) { console.error('Failed to initialize CSRF token:', e); }
+    })();
   }, []);
+
   const loginWithGoogle = () => {
-    window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+    window.location.href = `${API_ORIGIN}/oauth2/authorization/google`;
   };
 
   const handleUserId = (id) => {
@@ -31,10 +30,10 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('userId', id);
   };
 
-  const handleOAuthRedirect = async (token) => {
-    localStorage.setItem('token', token);
-    setToken(token);
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  const handleOAuthRedirect = async (t) => {
+    localStorage.setItem('token', t);
+    setToken(t);
+    axios.defaults.headers.common['Authorization'] = `Bearer ${t}`;
     navigate('/tasks');
   };
 
@@ -48,13 +47,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ 
-      token, 
-      loginWithGoogle, 
-      handleOAuthRedirect, 
-      logout ,
-      userId,
-      handleUserId
+    <AuthContext.Provider value={{
+      token, loginWithGoogle, handleOAuthRedirect, logout, userId, handleUserId
     }}>
       {children}
     </AuthContext.Provider>

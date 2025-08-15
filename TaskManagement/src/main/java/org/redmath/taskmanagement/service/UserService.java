@@ -44,11 +44,9 @@ public class UserService {
 
     public UserProfileDto getProfileFromJwt(Jwt jwt) throws AccessDeniedException {
         validateJwt(jwt);
-
         Long userId = extractUserId(jwt);
         Users user = findUserOrThrow(userId);
         String profilePicture = extractProfilePicture(jwt);
-
         return new UserProfileDto(user, profilePicture);
     }
 
@@ -62,7 +60,6 @@ public class UserService {
     private Long extractUserId(Jwt jwt) throws AccessDeniedException {
         Long userId = jwt.getClaim(CLAIM_USER_ID);
         if (userId == null) {
-
             throw new AccessDeniedException("Invalid authentication token");
         }
         return userId;
