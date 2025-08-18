@@ -4,10 +4,11 @@ spring:
       client:
         registration:
           google:
+            client-id: ${spring.security.google.client-id}
+            client-secret: ${spring.security.google.client-secret}
             scope:
               - profile
               - email
-
 
         provider:
           google:
