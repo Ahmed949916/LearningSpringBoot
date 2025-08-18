@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    url: ${MY_DB_URL}
+    username: ${MY_DB_USERNAME}
+    password: ${MY_DB_PASSWORD}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${SPRING_SECURITY_GOOGLE_CLIENT_ID}
+            client-secret: ${SPRING_SECURITY_GOOGLE_CLIENT_SECRET}
+            scope: [profile, email]
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+
+jwt:
+  signing:
+    key: ${JWT_SIGNING_KEY}
+
+server:
+  port: 8080
+
+app:
+  frontend:
+    base-url: ${APP_FRONTEND_BASE_URL}
