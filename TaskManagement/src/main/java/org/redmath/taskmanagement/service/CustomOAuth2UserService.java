@@ -17,7 +17,7 @@ public class CustomOAuth2UserService extends  DefaultOAuth2UserService {
     public CustomOAuth2UserService(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
-
+    @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         String email = oAuth2User.getAttribute("email");
@@ -26,7 +26,7 @@ public class CustomOAuth2UserService extends  DefaultOAuth2UserService {
         }
         Users user = userRepo.findByUsername(email)
                 .orElseGet(() -> {
-                    System.out.println(" Saving new user: " + email);
+
                     Users newUser = new Users();
                     newUser.setUsername(email);
                     newUser.setPassword("");
