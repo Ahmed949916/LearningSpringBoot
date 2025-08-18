@@ -1,104 +1,164 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import {
+  Box, Typography, Button, Drawer, IconButton,
+  List, ListItem, ListItemButton, ListItemText, Divider
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 import { getSelf } from '../services/api';
 import { useAuth } from '../Context/AuthContext';
-import './Header.css';
 import CustomButton from './CustomButton';
- 
+
 const Header = () => {
   const [userEmail, setUserEmail] = useState('');
   const [userRole, setUserRole] = useState('ROLE_USER');
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const { token, logout } = useAuth();
-  console.log(userRole)
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (token) {
-        try {
-          const userData = await getSelf();
-          
-         
-          if (userData && userData.user.email) {
-            setUserEmail(userData.user.email);
-          }
-          if (userData && userData.user.role) {
-            setUserRole(userData.user.role);
-          }
-        } catch (error) {
-          console.error('Failed to fetch user data:', error);
-        }
-      }
+      if (!token) return;
+      try {
+        const userData = await getSelf();
+        if (userData?.user?.email) setUserEmail(userData.user.email);
+        if (userData?.user?.role) setUserRole(userData.user.role);
+      } catch {}
     };
- 
-
-
     fetchUserData();
   }, [token]);
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
-  };
+  const navLinks = [
+    { to: '/tasks', label: 'Tasks', show: true },
+    { to: '/users', label: 'Users', show: userRole === 'ROLE_ADMIN' },
+    { to: '/profile', label: 'Profile', show: true }
+  ].filter(i => i.show);
 
   return (
-        <header className="header">
-            <div className="header-left">
-                <h1>Task Management</h1>
-            </div>
-            
-           
-            <div className="header-right desktop-nav">
-                <nav>
-                    <ul className="nav-links">
-                        <li><Link to="/tasks">Tasks</Link></li>
-                        { userRole === 'ROLE_ADMIN' && (
-                            <li><Link to="/users">Users</Link></li>
-                        )}
-                        
-                        <li><Link to="/profile">Profile</Link></li>
-                    </ul>
-                </nav>
-                <div className="user-info">
-                    <span className="user-email">{userEmail}</span>
-                   <CustomButton onClick={() => { logout() }} >
-                       Logout
-                   </CustomButton>
-                </div>
-            </div>
+    <Box
+      component="header"
+      sx={{
+        backgroundColor: '#004030',
+        px: { xs: 2, md: 4 },
+        py: 2,
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        position: 'relative'
+      }}
+    >
+      <Typography
+        variant="h6"
+        sx={{ color: '#FFF9E5', fontWeight: 700, fontSize: { xs: '1.3rem', md: '1.5rem' } }}
+      >
+        Task Management
+      </Typography>
 
-            
-            <div className="mobile-menu-toggle" onClick={toggleMobileMenu}>
-                <span className={`burger-line ${isMobileMenuOpen ? 'active' : ''}`}></span>
-                <span className={`burger-line ${isMobileMenuOpen ? 'active' : ''}`}></span>
-                <span className={`burger-line ${isMobileMenuOpen ? 'active' : ''}`}></span>
-            </div>
+      <Box
+        sx={{
+          display: { xs: 'none', md: 'flex' },
+          alignItems: 'center',
+          gap: 3
+        }}
+      >
+        <Box component="nav">
+          <Box
+            component="ul"
+            sx={{ display: 'flex', listStyle: 'none', m: 0, p: 0, gap: 2 }}
+          >
+            {navLinks.map(({ to, label }) => (
+              <Box component="li" key={to}>
+                <Link
+                  to={to}
+                  style={{ color: '#FFF9E5', textDecoration: 'none', fontWeight: 500 }}
+                >
+                  {label}
+                </Link>
+              </Box>
+            ))}
+          </Box>
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Typography variant="body2" sx={{ color: '#FFF9E5' }}>
+            {userEmail}
+          </Typography>
+          <CustomButton
+            sx={{ backgroundColor: '#4A9782', color: '#fff', '&:hover': { backgroundColor: '#3d806d' } }}
+            onClick={logout}
+          >
+            Logout
+          </CustomButton>
+        </Box>
+      </Box>
 
-       
-            <div className={`mobile-nav ${isMobileMenuOpen ? 'open' : ''}`}>
-                <nav>
-                    <ul className="mobile-nav-links">
-                        <li><Link to="/tasks" onClick={closeMobileMenu}>Tasks</Link></li>
-                        { userRole === 'ROLE_ADMIN' && (
-                            <li><Link to="/users" onClick={closeMobileMenu}>Users</Link></li>
-                        )}
-                         
-                        <li><Link to="/profile" onClick={closeMobileMenu}>Profile</Link></li>
-                    </ul>
-                </nav>
-                <div className="mobile-user-info">
-                    <span className="user-email">{userEmail}</span>
-                    <button onClick={() => { logout(); closeMobileMenu(); }} className="logout-btn">Logout</button>
-                </div>
-            </div>
+      <IconButton
+        onClick={() => setDrawerOpen(true)}
+        sx={{ display: { xs: 'inline-flex', md: 'none' }, color: '#FFF9E5' }}
+        aria-label="menu"
+      >
+        <MenuIcon />
+      </IconButton>
 
-          
-            {isMobileMenuOpen && <div className="mobile-menu-overlay" onClick={closeMobileMenu}></div>}
-        </header>
-    );
+      <Drawer
+        anchor="right"
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        ModalProps={{ keepMounted: true }}
+        PaperProps={{ sx: { width: 280 } }}
+      >
+        <Box sx={{ p: 2, backgroundColor: '#004030' }}>
+          <Typography variant="h6" sx={{ color: '#FFF9E5', fontWeight: 700 }}>
+            Task Management
+          </Typography>
+          <Typography variant="body2" sx={{ color: '#FFF9E5', opacity: 0.85 }}>
+            {userEmail}
+          </Typography>
+        </Box>
+        <Divider />
+        <Box sx={{display: 'flex', flexDirection: 'column', height: '100%',justifyContent: 'space-between' }}>
+
+        <List sx={{ p: 0 }}>
+          {navLinks.map(({ to, label }) => (
+            <ListItem key={to} disablePadding>
+              <ListItemButton
+                component={Link}
+                to={to}
+                onClick={() => setDrawerOpen(false)}
+                sx={{
+                  cursor: 'pointer',
+                  '&:hover': { backgroundColor: '#e0f2f1' },
+                  '& .MuiListItemText-primary': { fontWeight: 500 },
+                  color: '#333'
+                }}
+              >
+                <ListItemText primary={label} sx={{ fontWeight: 500 ,cursor: 'pointer'}} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+        <Box>
+
+        <Divider />
+        <Box sx={{ p: 2, backgroundColor: '#f9f9f9' }}>
+          <Button
+            onClick={() => {
+              logout();
+              setDrawerOpen(false);
+            }}
+            sx={{
+              width: '100%',
+              backgroundColor: '#4A9782',
+              color: '#fff',
+              '&:hover': { backgroundColor: '#3d806d' }
+            }}
+            >
+            Logout
+          </Button>
+              </Box>
+            </Box>
+        </Box>
+      </Drawer>
+    </Box>
+  );
 };
 
 export default Header;
