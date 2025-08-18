@@ -120,9 +120,11 @@
                         <artifactId>spotbugs</artifactId>
                         <version>4.9.3</version>
                     </dependency>
-
                 </dependencies>
                 <configuration>
+                    <effort>Max</effort>
+                    <threshold>Medium</threshold>
+                    <failOnError>true</failOnError>
                     <plugins>
                         <plugin>
                             <groupId>com.h3xstream.findsecbugs</groupId>
@@ -130,6 +132,7 @@
                             <version>1.14.0</version>
                         </plugin>
                     </plugins>
+                    <xmlOutput>true</xmlOutput>
                 </configuration>
                 <executions>
                     <execution>
@@ -140,6 +143,8 @@
                     </execution>
                 </executions>
             </plugin>
+
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
@@ -195,7 +200,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <optional>True</optional>
+            <optional>true</optional>
             <scope>runtime</scope>
         </dependency>
         <dependency>
