@@ -27,6 +27,10 @@ const TaskDialog = ({ open, onClose, initialTask, onSave, loading }) => {
   };
 
   const handleSubmit = () => {
+    if (!form.title || !form.description) {
+      alert('Please fill in all fields');
+      return;
+    }
     onSave(form);
   };
 
