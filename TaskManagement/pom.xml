@@ -25,6 +25,10 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
                 <version>12.1.0</version>
@@ -99,9 +103,7 @@
                             <outputDirectory>target/my-reports</outputDirectory>
                             <excludes>
                                 <exclude>**/config/**</exclude>
-
                                 <exclude>**/service/CustomOAuth2UserService.class</exclude>
-
                             </excludes>
                         </configuration>
                     </execution>
@@ -118,7 +120,25 @@
                         <artifactId>spotbugs</artifactId>
                         <version>4.9.3</version>
                     </dependency>
+
                 </dependencies>
+                <configuration>
+                    <plugins>
+                        <plugin>
+                            <groupId>com.h3xstream.findsecbugs</groupId>
+                            <artifactId>findsecbugs-plugin</artifactId>
+                            <version>1.14.0</version>
+                        </plugin>
+                    </plugins>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>spotbugs</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -163,11 +183,6 @@
 
 
 
-        <dependency>
-            <groupId>org.jacoco</groupId>
-            <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.13</version>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -224,11 +239,6 @@
         </dependency>
 
 
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.12.1</version>
-        </dependency>
 
 
         <dependency>
