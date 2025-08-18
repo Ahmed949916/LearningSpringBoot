@@ -14,7 +14,7 @@ import Button from '@mui/material/Button';
                 sx={{
                     backgroundColor: '#4A9782',
                     color: "#FFF9E5",
-                    fontWeight: "bold",
+                    fontWeight: "600",
                     padding: "10px",
                     height:"30px",
                     
