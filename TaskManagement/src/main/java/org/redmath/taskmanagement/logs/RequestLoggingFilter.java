@@ -1,5 +1,5 @@
 
-package org.redmath.taskmanagement.config;
+package org.redmath.taskmanagement.logs;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
