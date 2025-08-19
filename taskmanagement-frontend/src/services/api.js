@@ -2,11 +2,11 @@
 import axios from 'axios';
 
 
-const API_ORIGIN =
-  process.env.REACT_APP_API_BASE_URL?.replace(/\/$/, '') || ''; 
+// const API_ORIGIN =
+//   process.env.REACT_APP_API_BASE_URL?.replace(/\/$/, '') || ''; 
 
 
-const API_BASE_URL = `${API_ORIGIN}/api`;
+const API_BASE_URL = `api`;
 
 
 const api = axios.create({

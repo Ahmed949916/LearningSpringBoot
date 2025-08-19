@@ -7,7 +7,7 @@ module.exports = function (app) {
       '/oauth2/authorization'  
     ],
     createProxyMiddleware({
-      target:'http://localhost:8080',//'https://learningspringboot-production.up.railway.app',
+      target:'http://localhost:8080',
       changeOrigin: true,
       cookieDomainRewrite: 'localhost',
       xfwd: true,
