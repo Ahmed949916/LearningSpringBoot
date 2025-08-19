@@ -126,6 +126,94 @@ public class TaskServiceTest {
 
         verifyNoMoreInteractions(taskRepo, userRepo);
     }
+    @Test
+    public void testCreateTask_WithCompletedValue() {
+
+        Users owner = new Users();
+        owner.setUserId(1L);
+        owner.setUsername("owner@example.com");
+        when(userRepo.findById(1L)).thenReturn(Optional.of(owner));
+
+
+        TaskCreateRequest request = new TaskCreateRequest();
+        request.setTitle("Task with completed");
+        request.setDescription("Testing completed flag");
+        request.setCompleted(true);
+
+
+        when(taskRepo.save(any(Task.class))).thenAnswer(invocation -> {
+            Task taskToSave = invocation.getArgument(0);
+            taskToSave.setTaskId(1L);
+            return taskToSave;
+        });
+
+
+        Task createdTask = taskService.createTask(request, 1L);
+
+
+        assertTrue(createdTask.getCompleted(), "Task should be marked as completed");
+    }
+
+    @Test
+    public void testCreateTask_WithNullCompleted() {
+
+        Users owner = new Users();
+        owner.setUserId(1L);
+        owner.setUsername("owner@example.com");
+        when(userRepo.findById(1L)).thenReturn(Optional.of(owner));
+
+
+        TaskCreateRequest request = new TaskCreateRequest();
+        request.setTitle("Task with null completed");
+        request.setDescription("Testing default completed flag");
+        request.setCompleted(null);
+
+
+        when(taskRepo.save(any(Task.class))).thenAnswer(invocation -> {
+            Task taskToSave = invocation.getArgument(0);
+            taskToSave.setTaskId(1L);
+            return taskToSave;
+        });
+
+
+        Task createdTask = taskService.createTask(request, 1L);
+
+
+        assertFalse(createdTask.getCompleted(), "Task should default to not completed");
+    }
+    @Test
+    public void testCreateTaskUSerNotFound() {
+        when(userRepo.findById(1L)).thenReturn(Optional.empty());
+        assertThrows(NoSuchElementException.class, () -> taskService.createTask(createRequest, 1L));
+        verify(userRepo, times(1)).findById(1L);
+        verify(taskRepo, never()).save(any(Task.class));
+    }
+    @Test
+    public void testUpdateTaskUserNotFound() {
+        Task updatedTask = new Task();
+        updatedTask.setTitle("Updated Title");
+
+
+        when(taskRepo.findById(1L)).thenReturn(Optional.of(testTask));
+        when(userRepo.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> taskService.updateTask(1L, updatedTask, 1L));
+        verify(userRepo, times(1)).findById(1L);
+        verify(taskRepo, times(1)).findById(1L);
+        verify(taskRepo, never()).save(any(Task.class));
+    }
+
+    @Test
+    public void testDeleteTaskUserNotFound() {
+
+        when(taskRepo.findById(1L)).thenReturn(Optional.of(testTask));
+        when(userRepo.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> taskService.deleteTask(1L, 1L));
+        verify(userRepo, times(1)).findById(1L);
+        verify(taskRepo, times(1)).findById(1L);
+        verify(taskRepo, never()).delete(any(Task.class));
+    }
 
     @Test
     public void testDeleteTask_Success() throws Exception {
@@ -174,6 +262,58 @@ public class TaskServiceTest {
         Exception exception = assertThrows(java.nio.file.AccessDeniedException.class, () -> taskService.deleteTask(1L, 2L));
         assertEquals("You can only delete your own tasks", exception.getMessage());
 
+    }
+    @Test
+    public void testUpdateExistingTaskAsRequested() {
+        // Setup initial task with known values
+        Task existingTask = new Task();
+        existingTask.setTitle("Original Title");
+        existingTask.setDescription("Original Description");
+        existingTask.setCompleted(false);
+
+        // Test case 1: Update all fields
+        Task fullUpdateRequest = new Task();
+        fullUpdateRequest.setTitle("New Title");
+        fullUpdateRequest.setDescription("New Description");
+        fullUpdateRequest.setCompleted(true);
+
+        taskService.updateExistingTaskAsRequested(existingTask, fullUpdateRequest);
+
+        assertEquals("New Title", existingTask.getTitle());
+        assertEquals("New Description", existingTask.getDescription());
+        assertTrue(existingTask.getCompleted());
+
+
+        existingTask = new Task();
+        existingTask.setTitle("Original Title");
+        existingTask.setDescription("Original Description");
+        existingTask.setCompleted(false);
+
+        Task partialUpdateRequest = new Task();
+        partialUpdateRequest.setTitle("Updated Title");
+
+        partialUpdateRequest.setCompleted(true);
+
+        taskService.updateExistingTaskAsRequested(existingTask, partialUpdateRequest);
+
+        assertEquals("Updated Title", existingTask.getTitle());
+        assertEquals("Original Description", existingTask.getDescription());
+        assertTrue(existingTask.getCompleted());
+
+
+        existingTask = new Task();
+        existingTask.setTitle("Original Title");
+        existingTask.setDescription("Original Description");
+        existingTask.setCompleted(false);
+
+        Task emptyUpdateRequest = new Task();
+
+
+        taskService.updateExistingTaskAsRequested(existingTask, emptyUpdateRequest);
+
+        assertEquals("Original Title", existingTask.getTitle());
+        assertEquals("Original Description", existingTask.getDescription());
+        assertFalse(existingTask.getCompleted());
     }
 
 }
