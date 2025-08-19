@@ -145,7 +145,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testGetProfileFromJwt_PictureNull_YieldsNullInDto() throws AccessDeniedException {
+    public void testGetProfileFromJwt_PictureReturnNull() throws AccessDeniedException {
 
         when(jwt.getClaim("userId")).thenReturn(1L);
         when(jwt.getClaim("picture")).thenReturn(null);
