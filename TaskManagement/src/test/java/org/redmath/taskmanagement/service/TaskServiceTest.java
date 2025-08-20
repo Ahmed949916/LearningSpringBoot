@@ -265,13 +265,13 @@ public class TaskServiceTest {
     }
     @Test
     public void testUpdateExistingTaskAsRequested() {
-        // Setup initial task with known values
+
         Task existingTask = new Task();
         existingTask.setTitle("Original Title");
         existingTask.setDescription("Original Description");
         existingTask.setCompleted(false);
 
-        // Test case 1: Update all fields
+
         Task fullUpdateRequest = new Task();
         fullUpdateRequest.setTitle("New Title");
         fullUpdateRequest.setDescription("New Description");
