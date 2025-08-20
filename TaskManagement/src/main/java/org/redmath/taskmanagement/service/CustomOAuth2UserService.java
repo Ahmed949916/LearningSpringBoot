@@ -14,6 +14,7 @@ import java.util.Collections;
 @Service
 public class CustomOAuth2UserService extends  DefaultOAuth2UserService {
     private final UserRepo userRepo;
+    private final String defaultPass="";
     public CustomOAuth2UserService(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
@@ -29,7 +30,7 @@ public class CustomOAuth2UserService extends  DefaultOAuth2UserService {
 
                     Users newUser = new Users();
                     newUser.setUsername(email);
-                    newUser.setPassword("");
+                    newUser.setPassword(defaultPass);
                     newUser.setRole("ROLE_USER");
                     return userRepo.save(newUser);
                 });
