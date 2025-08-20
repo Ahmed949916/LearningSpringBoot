@@ -47,7 +47,10 @@ public class UserService {
         Long userId = extractUserId(jwt);
         Users user = findUserOrThrow(userId);
         String profilePicture = extractProfilePicture(jwt);
-        return new UserProfileDto(user, profilePicture);
+        UserProfileDto profile = new UserProfileDto();
+        profile.setUser(user);
+        profile.setPhotoLink(profilePicture);
+        return profile;
     }
 
     private void validateJwt(Jwt jwt) throws AccessDeniedException {
