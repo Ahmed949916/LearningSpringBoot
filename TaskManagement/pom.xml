@@ -74,22 +74,13 @@
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
-
-
                     <execution>
                         <id>report</id>
                         <phase>prepare-package</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
-                        <configuration>
-                            <excludes>
-                                <exclude>**/config/**</exclude>
 
-                                <exclude>**/service/CustomOAuth2UserService.class</exclude>
-
-                            </excludes>
-                        </configuration>
                     </execution>
 
                     <execution>
