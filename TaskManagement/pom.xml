@@ -101,10 +101,7 @@
                         <configuration>
                             <dataFile>target/jacoco.exec</dataFile>
                             <outputDirectory>target/my-reports</outputDirectory>
-                            <excludes>
-                                <exclude>**/config/**</exclude>
-                                <exclude>**/service/CustomOAuth2UserService.class</exclude>
-                            </excludes>
+
                         </configuration>
                     </execution>
                 </executions>
