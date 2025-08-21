@@ -156,7 +156,7 @@ class SecurityConfigTest {
     void testJwtAuthenticationConverter_WithSingleRole() {
         var converter = securityConfig.jwtAuthenticationConverter();
 
-        when(jwt.getClaimAsStringList("roles")).thenReturn(List.of("ROLE_USER"));
+        when(jwt.getClaimAsStringList("roles")).thenReturn(List.of("USER"));
 
         var auth = converter.convert(jwt);
 

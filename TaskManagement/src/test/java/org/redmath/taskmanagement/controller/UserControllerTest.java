@@ -1,4 +1,5 @@
 package org.redmath.taskmanagement.controller;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -8,32 +9,19 @@ import org.redmath.taskmanagement.security.WithMockJwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
-import org.springframework.security.oauth2.jwt.JwsHeader;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
 @SpringBootTest
 @AutoConfigureMockMvc
-@ActiveProfiles("test")
 public class UserControllerTest {
-
-
 
     @Autowired
     private MockMvc mockMvc;
@@ -43,7 +31,6 @@ public class UserControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
-
 
     @WithMockJwt
     @Test
@@ -66,6 +53,7 @@ public class UserControllerTest {
         String newUserJson = objectMapper.writeValueAsString(user);
 
         MvcResult result = mockMvc.perform(post("/api/user")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(newUserJson))
                 .andExpect(status().isCreated())
@@ -89,7 +77,7 @@ public class UserControllerTest {
     @Test
     public void testDeleteUserWithUserRole() throws Exception {
         Long id = createUser("testDeleteForbidden", "testDeletePass", "ROLE_USER");
-        mockMvc.perform(delete("/api/user/" + id))
+        mockMvc.perform(delete("/api/user/" + id).with(csrf()))
                 .andExpect(status().isForbidden());
     }
 
@@ -97,9 +85,8 @@ public class UserControllerTest {
     @Test
     public void testDeleteUserWithAdminRole() throws Exception {
         Long id = createUser("testDeleteSuccess", "testDeletePass", "ROLE_USER");
-        mockMvc.perform(delete("/api/user/" + id))
+        mockMvc.perform(delete("/api/user/" + id).with(csrf()))
                 .andExpect(status().isNoContent());
-
 
         mockMvc.perform(get("/api/user/" + id))
                 .andExpect(status().isNotFound());
@@ -111,5 +98,4 @@ public class UserControllerTest {
         mockMvc.perform(get("/api/user/9999"))
                 .andExpect(status().isNotFound());
     }
-
 }
