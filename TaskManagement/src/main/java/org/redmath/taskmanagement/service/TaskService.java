@@ -1,7 +1,7 @@
 package org.redmath.taskmanagement.service;
 
 import org.redmath.taskmanagement.entity.Task;
-import org.redmath.taskmanagement.entity.TaskCreateRequest;
+import org.redmath.taskmanagement.dto.TaskCreateDto;
 import org.redmath.taskmanagement.entity.Users;
 import org.redmath.taskmanagement.repository.TaskRepo;
 import org.redmath.taskmanagement.repository.UserRepo;
@@ -28,7 +28,7 @@ public class TaskService {
         return taskRepository.findByOwnerId(userId);
     }
 
-    public Task createTask(TaskCreateRequest task,Long userId ) {
+    public Task createTask(TaskCreateDto task, Long userId ) {
         Users user = userRepo.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
         Task newTask=new Task();

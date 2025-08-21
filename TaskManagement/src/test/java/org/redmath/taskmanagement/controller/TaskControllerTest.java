@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.redmath.taskmanagement.entity.Task;
-import org.redmath.taskmanagement.entity.TaskCreateRequest;
+import org.redmath.taskmanagement.dto.TaskCreateDto;
 import org.redmath.taskmanagement.repository.TaskRepo;
 import org.redmath.taskmanagement.security.WithMockJwt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ class TaskControllerTest {
     @WithMockJwt(userId = 1)
     @Test
     public void testCreateTask() throws Exception {
-        TaskCreateRequest task = new TaskCreateRequest();
+        TaskCreateDto task = new TaskCreateDto();
         task.setTitle("new task");
         task.setDescription("description");
 
@@ -78,7 +78,7 @@ class TaskControllerTest {
     @Test
     public void testDeleteTask() throws Exception {
 
-        TaskCreateRequest task = new TaskCreateRequest();
+        TaskCreateDto task = new TaskCreateDto();
         task.setTitle("Task to delete");
         task.setDescription("Will be deleted");
 
@@ -107,7 +107,7 @@ class TaskControllerTest {
     @Test
     public void testUpdateTask() throws Exception {
 
-        TaskCreateRequest createRequest = new TaskCreateRequest();
+        TaskCreateDto createRequest = new TaskCreateDto();
         createRequest.setTitle("Task to update");
         createRequest.setDescription("Will be updated");
 
@@ -167,7 +167,7 @@ class TaskControllerTest {
     @Test
     public void testAdminTaskCreation() throws Exception {
 
-        TaskCreateRequest task = new TaskCreateRequest();
+        TaskCreateDto task = new TaskCreateDto();
         task.setTitle("Admin task");
         task.setDescription("Created by admin");
 

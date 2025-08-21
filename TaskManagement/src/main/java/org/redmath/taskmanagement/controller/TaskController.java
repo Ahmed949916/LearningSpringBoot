@@ -2,7 +2,7 @@ package org.redmath.taskmanagement.controller;
 
 
 import org.redmath.taskmanagement.entity.Task;
-import org.redmath.taskmanagement.entity.TaskCreateRequest;
+import org.redmath.taskmanagement.dto.TaskCreateDto;
 import org.redmath.taskmanagement.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +25,7 @@ public class TaskController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Task createTask(@RequestBody TaskCreateRequest task, @AuthenticationPrincipal Jwt jwt) {
+    public Task createTask(@RequestBody TaskCreateDto task, @AuthenticationPrincipal Jwt jwt) {
         Long userId = jwt.getClaim("userId");
         return taskService.createTask(task, userId);
     }

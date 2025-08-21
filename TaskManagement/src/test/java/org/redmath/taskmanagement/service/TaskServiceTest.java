@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.redmath.taskmanagement.entity.Task;
-import org.redmath.taskmanagement.entity.TaskCreateRequest;
+import org.redmath.taskmanagement.dto.TaskCreateDto;
 import org.redmath.taskmanagement.entity.Users;
 import org.redmath.taskmanagement.repository.TaskRepo;
 import org.redmath.taskmanagement.repository.UserRepo;
@@ -34,7 +34,7 @@ public class TaskServiceTest {
     private TaskService taskService;
 
     private Task testTask;
-    private TaskCreateRequest createRequest;
+    private TaskCreateDto createRequest;
 
     @BeforeEach
     public void setup() {
@@ -44,7 +44,7 @@ public class TaskServiceTest {
         testTask.setDescription("Test Description");
         testTask.setOwnerId(1L);
 
-        createRequest = new TaskCreateRequest();
+        createRequest = new TaskCreateDto();
         createRequest.setTitle("New Task");
         createRequest.setDescription("New Description");
     }
@@ -135,7 +135,7 @@ public class TaskServiceTest {
         when(userRepo.findById(1L)).thenReturn(Optional.of(owner));
 
 
-        TaskCreateRequest request = new TaskCreateRequest();
+        TaskCreateDto request = new TaskCreateDto();
         request.setTitle("Task with completed");
         request.setDescription("Testing completed flag");
         request.setCompleted(true);
@@ -163,7 +163,7 @@ public class TaskServiceTest {
         when(userRepo.findById(1L)).thenReturn(Optional.of(owner));
 
 
-        TaskCreateRequest request = new TaskCreateRequest();
+        TaskCreateDto request = new TaskCreateDto();
         request.setTitle("Task with null completed");
         request.setDescription("Testing default completed flag");
         request.setCompleted(null);

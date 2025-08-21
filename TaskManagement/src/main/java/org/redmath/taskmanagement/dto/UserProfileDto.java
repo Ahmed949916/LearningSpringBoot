@@ -1,8 +1,9 @@
-package org.redmath.taskmanagement.entity;
+package org.redmath.taskmanagement.dto;
 
 
 import lombok.Getter;
 import lombok.Setter;
+import org.redmath.taskmanagement.entity.Users;
 
 @Getter
 @Setter

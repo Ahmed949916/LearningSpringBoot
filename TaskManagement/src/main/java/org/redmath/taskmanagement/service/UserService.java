@@ -1,6 +1,6 @@
 package org.redmath.taskmanagement.service;
 
-import org.redmath.taskmanagement.entity.UserProfileDto;
+import org.redmath.taskmanagement.dto.UserProfileDto;
 import org.redmath.taskmanagement.entity.Users;
 import org.redmath.taskmanagement.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;

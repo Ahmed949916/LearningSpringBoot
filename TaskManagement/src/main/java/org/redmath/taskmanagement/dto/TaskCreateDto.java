@@ -1,13 +1,12 @@
-package org.redmath.taskmanagement.entity;
+package org.redmath.taskmanagement.dto;
 
-import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
 
 @Getter
 @Setter
-public class TaskCreateRequest {
+public class TaskCreateDto {
     private String title;
     private String description;
     private Boolean completed;
