@@ -11,22 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@ActiveProfiles("test")
 class TaskControllerTest {
-
 
     @Autowired
     private MockMvc mockMvc;
@@ -39,7 +35,7 @@ class TaskControllerTest {
 
     @WithMockJwt(userId = 1)
     @Test
-    public void testGetTaskById() throws Exception {
+    void testGetTaskById() throws Exception {
         mockMvc.perform(get("/api/task/1"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -51,7 +47,7 @@ class TaskControllerTest {
 
     @WithMockJwt(userId = 1)
     @Test
-    public void testCreateTask() throws Exception {
+    void testCreateTask() throws Exception {
         TaskCreateDto task = new TaskCreateDto();
         task.setTitle("new task");
         task.setDescription("description");
@@ -59,6 +55,7 @@ class TaskControllerTest {
         String taskJson = objectMapper.writeValueAsString(task);
 
         MvcResult result = mockMvc.perform(post("/api/task")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(taskJson))
                 .andExpect(status().isCreated())
@@ -76,8 +73,7 @@ class TaskControllerTest {
 
     @WithMockJwt(userId = 1)
     @Test
-    public void testDeleteTask() throws Exception {
-
+    void testDeleteTask() throws Exception {
         TaskCreateDto task = new TaskCreateDto();
         task.setTitle("Task to delete");
         task.setDescription("Will be deleted");
@@ -85,6 +81,7 @@ class TaskControllerTest {
         String taskJson = objectMapper.writeValueAsString(task);
 
         MvcResult result = mockMvc.perform(post("/api/task")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(taskJson))
                 .andExpect(status().isCreated())
@@ -94,10 +91,8 @@ class TaskControllerTest {
         JsonNode node = objectMapper.readTree(responseBody);
         Long id = node.get("taskId").asLong();
 
-
-        mockMvc.perform(delete("/api/task/" + id))
+        mockMvc.perform(delete("/api/task/" + id).with(csrf()))
                 .andExpect(status().isNoContent());
-
 
         mockMvc.perform(get("/api/task/" + id))
                 .andExpect(status().isNotFound());
@@ -105,8 +100,7 @@ class TaskControllerTest {
 
     @WithMockJwt(userId = 1)
     @Test
-    public void testUpdateTask() throws Exception {
-
+    void testUpdateTask() throws Exception {
         TaskCreateDto createRequest = new TaskCreateDto();
         createRequest.setTitle("Task to update");
         createRequest.setDescription("Will be updated");
@@ -114,6 +108,7 @@ class TaskControllerTest {
         String createJson = objectMapper.writeValueAsString(createRequest);
 
         MvcResult result = mockMvc.perform(post("/api/task")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(createJson))
                 .andExpect(status().isCreated())
@@ -123,7 +118,6 @@ class TaskControllerTest {
         JsonNode node = objectMapper.readTree(responseBody);
         Long id = node.get("taskId").asLong();
 
-
         Task updatedTask = new Task();
         updatedTask.setTitle("Updated Task");
         updatedTask.setDescription("Updated Description");
@@ -131,6 +125,7 @@ class TaskControllerTest {
         String updatedTaskJson = objectMapper.writeValueAsString(updatedTask);
 
         mockMvc.perform(patch("/api/task/" + id)
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updatedTaskJson))
                 .andExpect(status().isOk())
@@ -142,14 +137,14 @@ class TaskControllerTest {
 
     @WithMockJwt(userId = 1)
     @Test
-    public void testGetTaskByIdNotFound() throws Exception {
+    void testGetTaskByIdNotFound() throws Exception {
         mockMvc.perform(get("/api/task/9999"))
                 .andExpect(status().isNotFound());
     }
 
     @WithMockJwt(userId = 1)
     @Test
-    public void testGetTasksByUserId() throws Exception {
+    void testGetTasksByUserId() throws Exception {
         mockMvc.perform(get("/api/task"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -158,15 +153,14 @@ class TaskControllerTest {
 
     @WithMockJwt(userId = 2)
     @Test
-    public void testAccessDeniedForDifferentUser() throws Exception {
+    void testAccessDeniedForDifferentUser() throws Exception {
         mockMvc.perform(get("/api/task/1"))
                 .andExpect(status().isForbidden());
     }
 
     @WithMockJwt(userId = 1, roles = {"ADMIN"})
     @Test
-    public void testAdminTaskCreation() throws Exception {
-
+    void testAdminTaskCreation() throws Exception {
         TaskCreateDto task = new TaskCreateDto();
         task.setTitle("Admin task");
         task.setDescription("Created by admin");
@@ -174,11 +168,11 @@ class TaskControllerTest {
         String taskJson = objectMapper.writeValueAsString(task);
 
         MvcResult result = mockMvc.perform(post("/api/task")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(taskJson))
                 .andExpect(status().isCreated())
                 .andReturn();
-
 
         String responseBody = result.getResponse().getContentAsString();
         JsonNode node = objectMapper.readTree(responseBody);
