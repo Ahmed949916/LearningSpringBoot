@@ -3,7 +3,7 @@ package org.redmath.taskmanagement.config;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import org.redmath.taskmanagement.entity.Users;
 import org.redmath.taskmanagement.repository.UserRepo;
-import org.redmath.taskmanagement.service.*;
+import org.redmath.taskmanagement.service.CustomOAuth2UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
