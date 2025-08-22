@@ -73,7 +73,7 @@ public class UserControllerTest {
         assertEquals("testCreatePass", savedUser.getPassword());
     }
 
-    @WithMockJwt(roles = {"USER"})
+    @WithMockJwt
     @Test
     public void testDeleteUserWithUserRole() throws Exception {
         Long id = createUser("testDeleteForbidden", "testDeletePass", "ROLE_USER");
