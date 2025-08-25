@@ -9,10 +9,10 @@ const OAuth2RedirectHandler = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const token = params.get('token');
+    const jwtToken = params.get('token');
 
-    if (token) {
-      handleOAuthRedirect(token);
+    if (jwtToken) {
+      handleOAuthRedirect(jwtToken);
     } else {
       navigate('/login', { state: { error: 'Authentication failed' } });
     }
