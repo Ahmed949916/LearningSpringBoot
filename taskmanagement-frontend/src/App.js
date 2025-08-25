@@ -11,7 +11,9 @@ import Layout from './Components/Layout';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#3f51b5',
+      main: '#004030',
+      lightMain: '#4A9782',
+      textLight:"#FFFFFF"
     },
     secondary: {
       main: '#f50057',

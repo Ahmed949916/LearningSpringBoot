@@ -7,7 +7,7 @@ const TasksTable = ({ tasks, onEdit, onDelete, disabled }) => {
     <TableContainer>
       <Table>
         <TableHead  sx={{}}>
-          <TableRow sx={{ backgroundColor: '#004030' }}>
+          <TableRow sx={{ backgroundColor: 'primary.main' }}>
             <TableCell sx={{ fontWeight: 'bold',color:"#fff" }}>Title</TableCell>
             <TableCell sx={{ fontWeight: 'bold',color:"#fff" }}>Description</TableCell>
             <TableCell sx={{ fontWeight: 'bold',color:"#fff" }}>Actions</TableCell>

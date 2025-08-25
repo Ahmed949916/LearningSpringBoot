@@ -37,7 +37,7 @@ const Header = () => {
     <Box
       component="header"
       sx={{
-        backgroundColor: '#004030',
+        backgroundColor: 'primary.main',
         px: { xs: 2, md: 4 },
         py: 2,
         display: 'flex',
@@ -48,7 +48,7 @@ const Header = () => {
     >
       <Typography
         variant="h6"
-        sx={{ color: '#FFF9E5', fontWeight: 700, fontSize: { xs: '1.3rem', md: '1.5rem' } }}
+        sx={{ color: 'primary.textLight', fontWeight: 700, fontSize: { xs: '1.3rem', md: '1.5rem' } }}
       >
         Task Management
       </Typography>
@@ -69,7 +69,7 @@ const Header = () => {
               <Box component="li" key={to}>
                 <Link
                   to={to}
-                  style={{ color: '#FFF9E5', textDecoration: 'none', fontWeight: 500 }}
+                  style={{ color: 'primary.textLight', textDecoration: 'none', fontWeight: 500 }}
                 >
                   {label}
                 </Link>
@@ -78,11 +78,10 @@ const Header = () => {
           </Box>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Typography variant="body2" sx={{ color: '#FFF9E5' }}>
+          <Typography variant="body2" sx={{ color: 'primary.textLight' }}>
             {userEmail}
           </Typography>
           <CustomButton
-            sx={{ backgroundColor: '#4A9782', color: '#fff', '&:hover': { backgroundColor: '#3d806d' } }}
             onClick={logout}
           >
             Logout
@@ -92,7 +91,7 @@ const Header = () => {
 
       <IconButton
         onClick={() => setDrawerOpen(true)}
-        sx={{ display: { xs: 'inline-flex', md: 'none' }, color: '#FFF9E5' }}
+        sx={{ display: { xs: 'inline-flex', md: 'none' }, color: 'primary.textLight' }}
         aria-label="menu"
       >
         <MenuIcon />
@@ -106,10 +105,10 @@ const Header = () => {
         PaperProps={{ sx: { width: 280 } }}
       >
         <Box sx={{ p: 2, backgroundColor: '#004030' }}>
-          <Typography variant="h6" sx={{ color: '#FFF9E5', fontWeight: 700 }}>
+          <Typography variant="h6" sx={{ color: 'primary.textLight', fontWeight: 700 }}>
             Task Management
           </Typography>
-          <Typography variant="body2" sx={{ color: '#FFF9E5', opacity: 0.85 }}>
+          <Typography variant="body2" sx={{ color: 'primary.textLight', opacity: 0.85 }}>
             {userEmail}
           </Typography>
         </Box>
@@ -125,9 +124,7 @@ const Header = () => {
                 onClick={() => setDrawerOpen(false)}
                 sx={{
                   cursor: 'pointer',
-                  '&:hover': { backgroundColor: '#e0f2f1' },
-                  '& .MuiListItemText-primary': { fontWeight: 500 },
-                  color: '#333'
+                
                 }}
               >
                 <ListItemText primary={label} sx={{ fontWeight: 500 ,cursor: 'pointer'}} />
@@ -138,7 +135,7 @@ const Header = () => {
         <Box>
 
         <Divider />
-        <Box sx={{ p: 2, backgroundColor: '#f9f9f9' }}>
+        <Box sx={{ p: 2, backgroundColor: 'primary.lightMain' }}>
           <Button
             onClick={() => {
               logout();
@@ -146,9 +143,8 @@ const Header = () => {
             }}
             sx={{
               width: '100%',
-              backgroundColor: '#4A9782',
-              color: '#fff',
-              '&:hover': { backgroundColor: '#3d806d' }
+              backgroundColor: 'primary.lightMain',
+              color: 'primary.textLight',
             }}
             >
             Logout

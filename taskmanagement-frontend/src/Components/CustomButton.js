@@ -12,7 +12,7 @@ import Button from '@mui/material/Button';
         return (
             <Button
                 sx={{
-                    backgroundColor: '#4A9782',
+                    backgroundColor: 'primary.lightMain',
                     color: "#FFF9E5",
                     fontWeight: "600",
                     padding: "10px",
