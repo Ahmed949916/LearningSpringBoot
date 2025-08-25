@@ -1,6 +1,7 @@
 package org.redmath.taskmanagement.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.redmath.taskmanagement.dto.UserDto;
 import org.redmath.taskmanagement.dto.UserProfileDto;
 import org.redmath.taskmanagement.entity.Users;
 import org.redmath.taskmanagement.service.UserService;
@@ -34,7 +35,7 @@ public class UserController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Users> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         return userService.getAllUsers();
     }
 

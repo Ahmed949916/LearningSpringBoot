@@ -1,5 +1,6 @@
 package org.redmath.taskmanagement.service;
 
+import org.redmath.taskmanagement.dto.UserDto;
 import org.redmath.taskmanagement.dto.UserProfileDto;
 import org.redmath.taskmanagement.entity.Users;
 import org.redmath.taskmanagement.repository.UserRepo;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -33,8 +35,15 @@ public class UserService {
     }
 
 
-    public List<Users> getAllUsers() {
-        return userRepo.findAll();
+    public List<UserDto> getAllUsers() {
+        return userRepo.findAll().stream().map(user -> {
+                    UserDto dto = new UserDto();
+                    dto.setUserId(user.getUserId());
+                    dto.setUsername(user.getUsername());
+                    dto.setRole(user.getRole());
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
     public void deleteUser(Long id) {

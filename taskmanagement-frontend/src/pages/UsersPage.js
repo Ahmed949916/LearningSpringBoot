@@ -7,10 +7,13 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { deleteUser, getUsers } from '../services/api.js';
-
+import CustomButton from '../Components/CustomButton.js';
+import CreateUserModal from '../Components/users/CreateUserModal.js';
+ 
 const UsersPage = () => {
   const { token } = useAuth();
   const [users, setUsers] = useState([]);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
  
   useEffect(() => {
     if (token) {
@@ -19,8 +22,6 @@ const UsersPage = () => {
     // eslint-disable-next-line
   }, [token]);
 
- 
-
   const handleDelete = async (id) => {
     try {
      await deleteUser(id);
@@ -28,6 +29,11 @@ const UsersPage = () => {
     } catch (error) {
       console.error('Error deleting user:', error);
     }
+  };
+
+  const handleUserCreated = () => {
+    // Refresh the users list after creating a new user
+    getUsers().then(setUsers);
   };
 
   if (!token) {
@@ -40,7 +46,12 @@ const UsersPage = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" sx={{ mb: 3 }}>Users</Typography>
+      <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3}}>
+        <Typography variant="h4" sx={{ mb: 3 }}>Users</Typography>
+        <CustomButton onClick={() => setIsCreateModalOpen(true)}>
+          Create User
+        </CustomButton>
+      </Box>
       
       <TableContainer component={Paper}>
         <Table>
@@ -68,6 +79,12 @@ const UsersPage = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <CreateUserModal
+        open={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onUserCreated={handleUserCreated}
+      />
     </Box>
   );
 };

@@ -33,6 +33,7 @@ function App() {
               <Route path="/profile" element={<Profile />}/>
               <Route path="/tasks" element={<TasksPage />} />
               <Route path="/users" element={<UsersPage />} />
+              <Route path="*" element={<LoginPage />} />
             </Routes>
           </Layout>
         </AuthProvider>

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.redmath.taskmanagement.dto.UserDto;
 import org.redmath.taskmanagement.dto.UserProfileDto;
 import org.redmath.taskmanagement.entity.Users;
 import org.redmath.taskmanagement.repository.UserRepo;
@@ -64,7 +65,7 @@ public class UserServiceTest {
 
         when(userRepo.findAll()).thenReturn(Arrays.asList(testUser, user2));
 
-        List<Users> result = userService.getAllUsers();
+        List<UserDto> result = userService.getAllUsers();
 
         assertNotNull(result);
         assertEquals(2, result.size());

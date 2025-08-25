@@ -30,5 +30,5 @@ export const getUsers = async () => (await api.get("/user")).data;
 export const deleteUser = async (id) => api.delete(`/user/${id}`);
 
 export const getSelf = async () => (await api.get("/user/profile")).data;
-
+export const createUser =async (userData) => (await api.post("/user", userData)).data;
 export default api;
