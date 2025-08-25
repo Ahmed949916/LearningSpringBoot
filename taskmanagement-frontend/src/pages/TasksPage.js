@@ -4,7 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { getTasks, createTask, updateTask, deleteTask } from '../services/api';
 import { useAuth } from '../Context/AuthContext';
 import CustomButton from '../Components/CustomButton';
-import TaskDialog from '../Components/tasks/TaskDialog';
+import CreateTaskDialog from '../Components/tasks/CreateTaskDialog';
 import TasksTable from '../Components/tasks/TasksTable';
 
 const TasksPage = () => {
@@ -111,7 +111,7 @@ const TasksPage = () => {
         />
       )}
 
-      <TaskDialog
+      <CreateTaskDialog
         open={openDialog}
         onClose={handleCloseDialog}
         initialTask={editingTask}
