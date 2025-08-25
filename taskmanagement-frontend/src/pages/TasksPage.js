@@ -91,7 +91,7 @@ const TasksPage = () => {
         <Alert severity="success" onClose={() => setSuccess('')}>{success}</Alert>
       </Snackbar>
 
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems:"center",mb:3}}>
         <Typography variant="h4">Tasks</Typography>
         <CustomButton onClick={() => handleOpenDialog()} startIcon={<AddIcon />}>
           Add Task

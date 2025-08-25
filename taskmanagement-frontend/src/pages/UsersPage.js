@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../Context/AuthContext.js';
- 
+import AddIcon from '@mui/icons-material/Add';
 import { 
   Box, Typography, Table, TableBody, TableCell, 
   TableContainer, TableHead, TableRow, Paper, IconButton
@@ -32,7 +32,6 @@ const UsersPage = () => {
   };
 
   const handleUserCreated = () => {
-    // Refresh the users list after creating a new user
     getUsers().then(setUsers);
   };
 
@@ -46,9 +45,9 @@ const UsersPage = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3}}>
-        <Typography variant="h4" sx={{ mb: 3 }}>Users</Typography>
-        <CustomButton onClick={() => setIsCreateModalOpen(true)}>
+      <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center',mb:3}}>
+        <Typography variant="h4">Users</Typography>
+        <CustomButton startIcon={<AddIcon />} onClick={() => setIsCreateModalOpen(true)}>
           Create User
         </CustomButton>
       </Box>
