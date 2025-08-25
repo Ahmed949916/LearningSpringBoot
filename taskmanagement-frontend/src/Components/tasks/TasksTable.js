@@ -6,12 +6,12 @@ const TasksTable = ({ tasks, onEdit, onDelete, disabled }) => {
   return (
     <TableContainer>
       <Table>
-        <TableHead>
-          <TableRow sx={{ backgroundColor: '#fffcf4ff' }}>
-            <TableCell sx={{ fontWeight: 'bold' }}>Title</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Description</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
+        <TableHead  sx={{}}>
+          <TableRow sx={{ backgroundColor: '#004030' }}>
+            <TableCell sx={{ fontWeight: 'bold',color:"#fff" }}>Title</TableCell>
+            <TableCell sx={{ fontWeight: 'bold',color:"#fff" }}>Description</TableCell>
+            <TableCell sx={{ fontWeight: 'bold',color:"#fff" }}>Actions</TableCell>
+            <TableCell sx={{ fontWeight: 'bold',color:"#fff" }}>Status</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -19,6 +19,7 @@ const TasksTable = ({ tasks, onEdit, onDelete, disabled }) => {
             <TableRow key={task.taskId}>
               <TableCell>{task.title}</TableCell>
               <TableCell>{task.description}</TableCell>
+              <TableCell>{task.completed ? 'Completed' : 'Pending'}</TableCell>
               <TableCell>
                 <IconButton onClick={() => onEdit(task)} disabled={disabled}>
                   <EditIcon sx={{ color: 'primary.main' }} />
@@ -27,7 +28,7 @@ const TasksTable = ({ tasks, onEdit, onDelete, disabled }) => {
                   <DeleteIcon sx={{ color: 'error.main' }} />
                 </IconButton>
               </TableCell>
-              <TableCell>{task.completed ? 'Completed' : 'Pending'}</TableCell>
+              
             </TableRow>
           ))}
         </TableBody>
