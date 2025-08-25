@@ -21,11 +21,13 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.springframework.security.core.Authentication;
 
 
@@ -59,9 +61,7 @@ public class SecurityConfig {
         converter.setJwtGrantedAuthoritiesConverter(jwt -> {
             List<String> roles = jwt.getClaimAsStringList("roles");
             if (roles == null) return List.of();
-            return roles.stream()
-                    .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toList());
+            return roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
         });
         return converter;
     }
@@ -73,69 +73,32 @@ public class SecurityConfig {
     }
 
 
-
-
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtEncoder jwtEncoder) throws Exception {
-        http
-                .csrf(csrf -> csrf
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
-                )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/", "/api/public/**", "/api/csrf",
-                                "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
-                                "/login/oauth2/**", "/oauth2/**"
-                        ).permitAll()
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt
-                                .decoder(jwtDecoder())
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter())
-                        )
-                )
-                .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-                        .successHandler((request, response, authentication) -> {
-                            String redirectUrl = generateJwtAndRedirect(authentication, jwtEncoder, userRepo);
-                            response.sendRedirect(redirectUrl);
-                        })
+        http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)).authorizeHttpRequests(auth -> auth.requestMatchers("/", "/api/public/**", "/api/csrf", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/login/oauth2/**", "/oauth2/**").permitAll().requestMatchers(HttpMethod.OPTIONS, "/**").permitAll().anyRequest().authenticated()).oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.decoder(jwtDecoder()).jwtAuthenticationConverter(jwtAuthenticationConverter()))).oauth2Login(oauth2 -> oauth2.userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService)).successHandler((request, response, authentication) -> {
+                    String redirectUrl = generateJwtAndRedirect(authentication, jwtEncoder, userRepo);
+                    response.sendRedirect(redirectUrl);
+                })
 
-                )
-                .logout(logout -> logout.logoutSuccessUrl("/").permitAll())
-                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
+        ).logout(logout -> logout.logoutSuccessUrl("/").permitAll()).headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
 
         return http.build();
     }
+
     private String generateJwtAndRedirect(Authentication authentication, JwtEncoder jwtEncoder, UserRepo userRepo) {
         long expirySeconds = 3600;
 
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
         String email = oAuth2User.getAttribute("email");
 
-        Users user = userRepo.findByUsername(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        Users user = userRepo.findByUsername(email).orElseThrow(() -> new RuntimeException("User not found"));
 
-        JwtClaimsSet claims = JwtClaimsSet.builder()
-                .subject(authentication.getName())
-                .issuedAt(Instant.now())
-                .expiresAt(Instant.now().plusSeconds(expirySeconds))
-                .claim("userId", user.getUserId())
-                .claim("picture", oAuth2User.getAttribute("picture"))
-                .claim("roles", authentication.getAuthorities().stream()
-                        .map(GrantedAuthority::getAuthority)
-                        .toList())
-                .build();
+        JwtClaimsSet claims = JwtClaimsSet.builder().subject(authentication.getName()).issuedAt(Instant.now()).expiresAt(Instant.now().plusSeconds(expirySeconds)).claim("userId", user.getUserId()).claim("picture", oAuth2User.getAttribute("picture")).claim("roles", authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList()).build();
 
         var jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build();
         String token = jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
 
-        return frontendBaseUrl+"/oauth2/redirect?token=" + token + "&userId=" + user.getUserId();
+        return frontendBaseUrl + "/oauth2/redirect?token=" + token + "&userId=" + user.getUserId();
     }
 
 }

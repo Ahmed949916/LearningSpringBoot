@@ -1,4 +1,5 @@
 package org.redmath.taskmanagement.controller;
+
 import lombok.extern.slf4j.Slf4j;
 import org.redmath.taskmanagement.dto.UserProfileDto;
 import org.redmath.taskmanagement.entity.Users;
@@ -8,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 
@@ -37,14 +39,13 @@ public class UserController {
     }
 
 
-
     @GetMapping("/profile")
     public UserProfileDto getCurrentUser(@AuthenticationPrincipal Jwt jwt) throws AccessDeniedException {
         return userService.getProfileFromJwt(jwt);
     }
 
     @GetMapping("/{id}")
-    public Users getUserById(@PathVariable  Long id){
+    public Users getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
 

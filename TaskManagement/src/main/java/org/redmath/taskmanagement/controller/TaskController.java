@@ -4,11 +4,11 @@ package org.redmath.taskmanagement.controller;
 import org.redmath.taskmanagement.entity.Task;
 import org.redmath.taskmanagement.dto.TaskCreateDto;
 import org.redmath.taskmanagement.service.TaskService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 
