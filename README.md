@@ -30,4 +30,5 @@ A full stack task management application that allows users to:
 - Context API for state management
 
 **Database:**
-- H2  
+- H2  (dev)
+- Postgres(prod)
