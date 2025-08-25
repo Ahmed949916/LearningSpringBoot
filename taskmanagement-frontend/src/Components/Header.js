@@ -11,7 +11,7 @@ import CustomButton from './CustomButton';
 
 const Header = () => {
   const [userEmail, setUserEmail] = useState('');
-  const [userRole, setUserRole] = useState('ROLE_USER');
+  const [userRole, setUserRole] = useState('USER');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { token, logout } = useAuth();
 
