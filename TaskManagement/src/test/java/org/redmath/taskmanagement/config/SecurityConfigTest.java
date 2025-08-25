@@ -25,6 +25,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -83,13 +84,7 @@ class SecurityConfigTest {
         when(userRepo.findByUsername(email)).thenReturn(Optional.of(testUser));
 
 
-        String result = (String) ReflectionTestUtils.invokeMethod(
-                securityConfig,
-                "generateJwtAndRedirect",
-                authentication,
-                jwtEncoder,
-                userRepo
-        );
+        String result = (String) ReflectionTestUtils.invokeMethod(securityConfig, "generateJwtAndRedirect", authentication, jwtEncoder, userRepo);
 
 
         assertNotNull(result);
@@ -111,15 +106,7 @@ class SecurityConfigTest {
         when(oAuth2User.getAttribute("email")).thenReturn(email);
         when(userRepo.findByUsername(email)).thenReturn(Optional.empty());
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () ->
-                ReflectionTestUtils.invokeMethod(
-                        securityConfig,
-                        "generateJwtAndRedirect",
-                        authentication,
-                        jwtEncoder,
-                        userRepo
-                )
-        );
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> ReflectionTestUtils.invokeMethod(securityConfig, "generateJwtAndRedirect", authentication, jwtEncoder, userRepo));
 
         assertEquals("User not found", exception.getMessage());
         verify(userRepo).findByUsername(email);
@@ -168,6 +155,7 @@ class SecurityConfigTest {
         verify(jwt).getClaimAsStringList("roles");
 
     }
+
     @Test
     void testJwtAuthenticationConvertor_WithNullRoles() {
         var converter = securityConfig.jwtAuthenticationConverter();
@@ -182,7 +170,6 @@ class SecurityConfigTest {
 
         verify(jwt).getClaimAsStringList("roles");
     }
-
 
 
 }

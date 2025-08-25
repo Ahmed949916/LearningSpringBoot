@@ -68,7 +68,7 @@ public class TaskServiceTest {
 
 
     @Test
-    public void testGetTaskById_NotFound()  {
+    public void testGetTaskById_NotFound() {
         when(taskRepo.findById(99L)).thenReturn(Optional.empty());
         assertThrows(NoSuchElementException.class, () -> taskService.findById(99L, 1L));
         verify(taskRepo, times(1)).findById(99L);
@@ -76,7 +76,7 @@ public class TaskServiceTest {
 
 
     @Test
-    public void testUpdateTask_NotFound()   {
+    public void testUpdateTask_NotFound() {
         when(taskRepo.findById(99L)).thenReturn(Optional.empty());
         Task updatedTask = new Task();
         updatedTask.setTitle("Updated Title");
@@ -87,7 +87,7 @@ public class TaskServiceTest {
 
 
     @Test
-    public void testDeleteTask_NotFound()   {
+    public void testDeleteTask_NotFound() {
         when(taskRepo.findById(99L)).thenReturn(Optional.empty());
         assertThrows(NoSuchElementException.class, () -> taskService.deleteTask(99L, 1L));
         verify(taskRepo, times(1)).findById(99L);
@@ -95,7 +95,7 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void testCreateTask()  {
+    public void testCreateTask() {
 
         Users owner = new Users();
         owner.setUserId(1L);
@@ -126,6 +126,7 @@ public class TaskServiceTest {
 
         verifyNoMoreInteractions(taskRepo, userRepo);
     }
+
     @Test
     public void testCreateTask_WithCompletedValue() {
 
@@ -181,6 +182,7 @@ public class TaskServiceTest {
 
         assertFalse(createdTask.getCompleted(), "Task should default to not completed");
     }
+
     @Test
     public void testCreateTaskUSerNotFound() {
         when(userRepo.findById(1L)).thenReturn(Optional.empty());
@@ -188,6 +190,7 @@ public class TaskServiceTest {
         verify(userRepo, times(1)).findById(1L);
         verify(taskRepo, never()).save(any(Task.class));
     }
+
     @Test
     public void testUpdateTaskUserNotFound() {
         Task updatedTask = new Task();
@@ -231,7 +234,7 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void updateTask_OtherUser()   {
+    public void updateTask_OtherUser() {
         Users owner = new Users();
         owner.setUserId(2L);
         owner.setUsername("owner@example.com");
@@ -248,7 +251,7 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void deleteTask_OtherUser()  {
+    public void deleteTask_OtherUser() {
         Users owner = new Users();
         owner.setUserId(2L);
         owner.setUsername("owner@example.com");
@@ -263,6 +266,7 @@ public class TaskServiceTest {
         assertEquals("You can only delete your own tasks", exception.getMessage());
 
     }
+
     @Test
     public void testUpdateExistingTaskAsRequested() {
 
