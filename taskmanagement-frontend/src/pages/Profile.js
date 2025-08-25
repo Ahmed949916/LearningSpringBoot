@@ -78,7 +78,7 @@ const Profile = () => {
               px: 2, py: 0.5, borderRadius: 3, fontWeight: 600
             }}
           >
-            {user.role === 'ROLE_ADMIN' ? 'Administrator' : 'User'}
+            {user.role }
           </Typography>
         </CardContent>
       </Card>
