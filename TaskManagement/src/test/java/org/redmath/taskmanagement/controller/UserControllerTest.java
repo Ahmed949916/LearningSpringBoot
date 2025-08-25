@@ -41,7 +41,22 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.userId").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("ahmed40152@gmail.com"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.password").value(""))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.role").value("ROLE_ADMIN"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.role").value("ADMIN"));
+    }
+    @WithMockJwt(roles = {"ADMIN"})
+    @Test
+    public void testGetAllUsersWithAdminRole() throws Exception {
+        mockMvc.perform(get("/api/user"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+    }
+    @WithMockJwt
+    @Test
+    public void testGetAllUsersWithUserRole() throws Exception {
+        mockMvc.perform(get("/api/user"))
+                .andExpect(status().isForbidden());
+
     }
 
     @WithMockJwt
@@ -67,7 +82,7 @@ public class UserControllerTest {
     @WithMockJwt
     @Test
     public void testCreateUser() throws Exception {
-        Long id = createUser("testCreate", "testCreatePass", "ROLE_USER");
+        Long id = createUser("testCreate", "testCreatePass", "USER");
         Users savedUser = userRepo.findById(id).orElseThrow();
         assertEquals("testCreate", savedUser.getUsername());
         assertEquals("testCreatePass", savedUser.getPassword());
@@ -76,7 +91,7 @@ public class UserControllerTest {
     @WithMockJwt
     @Test
     public void testDeleteUserWithUserRole() throws Exception {
-        Long id = createUser("testDeleteForbidden", "testDeletePass", "ROLE_USER");
+        Long id = createUser("testDeleteForbidden", "testDeletePass", "USER");
         mockMvc.perform(delete("/api/user/" + id).with(csrf()))
                 .andExpect(status().isForbidden());
     }
@@ -84,7 +99,7 @@ public class UserControllerTest {
     @WithMockJwt(roles = {"ADMIN"})
     @Test
     public void testDeleteUserWithAdminRole() throws Exception {
-        Long id = createUser("testDeleteSuccess", "testDeletePass", "ROLE_USER");
+        Long id = createUser("testDeleteSuccess", "testDeletePass", "USER");
         mockMvc.perform(delete("/api/user/" + id).with(csrf()))
                 .andExpect(status().isNoContent());
 

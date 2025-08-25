@@ -73,7 +73,7 @@ class SecurityConfigTest {
         String picture = "http://example.com/picture.jpg";
 
 
-        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("USER"));
 
         when(authentication.getPrincipal()).thenReturn(oAuth2User);
         when(authentication.getName()).thenReturn("test-user");
@@ -163,7 +163,7 @@ class SecurityConfigTest {
         assertNotNull(auth);
         assertNotNull(auth.getAuthorities());
         assertEquals(1, auth.getAuthorities().size());
-        assertEquals("ROLE_USER", auth.getAuthorities().iterator().next().getAuthority());
+        assertEquals("USER", auth.getAuthorities().iterator().next().getAuthority());
 
         verify(jwt).getClaimAsStringList("roles");
 

@@ -15,7 +15,7 @@ databaseChangeLog:
                   value: ""
               - column:
                   name: role
-                  value: ROLE_ADMIN
+                  value: ADMIN
   - changeSet:
       id: data-0.0.2
       author: users-team
@@ -32,6 +32,6 @@ databaseChangeLog:
                   value: "{noop}admin"
               - column:
                   name: role
-                  value: ROLE_ADMIN
+                  value: ADMIN
 
 

@@ -37,7 +37,7 @@ public class WithMockJwtSecurityContextFactory implements WithSecurityContextFac
         );
 
         var authorities = Arrays.stream(annotation.roles())
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+                .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
         JwtAuthenticationToken authentication = new JwtAuthenticationToken(jwt, authorities);

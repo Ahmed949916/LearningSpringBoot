@@ -60,7 +60,7 @@ public class SecurityConfig {
             List<String> roles = jwt.getClaimAsStringList("roles");
             if (roles == null) return List.of();
             return roles.stream()
-                    .map(r -> new SimpleGrantedAuthority("ROLE_" + r))
+                    .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());
         });
         return converter;

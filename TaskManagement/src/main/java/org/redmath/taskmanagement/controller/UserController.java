@@ -31,6 +31,7 @@ public class UserController {
 
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<Users> getAllUsers() {
         return userService.getAllUsers();
     }
@@ -50,12 +51,9 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteUser(@PathVariable Long id, @AuthenticationPrincipal Jwt jwt) throws AccessDeniedException {
 
-        if (!jwt.getClaimAsStringList("roles").contains("ROLE_ADMIN")) {
-            throw new AccessDeniedException("You do not have permission to delete users");
-        }
         userService.deleteUser(id);
     }
 }
