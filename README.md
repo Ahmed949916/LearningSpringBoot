@@ -19,7 +19,7 @@ A full stack task management application that allows users to:
 ## 🛠 Tech Stack
 
 **Backend:**
-- JDK 24
+- JDK 21
 - Spring Boot 
 - Spring Security
 - JPA/Hibernate
