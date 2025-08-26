@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Box, Typography, Button, Drawer, IconButton,
-  List, ListItem, ListItemButton, ListItemText, Divider
+  List, ListItem, ListItemButton, ListItemText 
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { getSelf } from '../services/api';
 import { useAuth } from '../Context/AuthContext';
 import CustomButton from './CustomButton';
-
+import LogoutIcon from '@mui/icons-material/Logout';
 const Header = () => {
   const [userEmail, setUserEmail] = useState('');
   const [userRole, setUserRole] = useState('USER');
@@ -62,25 +62,23 @@ const Header = () => {
       >
         <Box component="nav">
           <Box
-            component="ul"
-            sx={{ display: 'flex', listStyle: 'none', m: 0, p: 0, gap: 2 }}
+            sx={{ display: 'flex',  m: 0, p: 0, gap: 2 }}
           >
             {navLinks.map(({ to, label }) => (
-              <Box component="li" key={to}>
+              <Box key={to}>
                 <Link
                   to={to}
-                  style={{ color: 'primary.textLight', textDecoration: 'none', fontWeight: 500 }}
+                  style={{ textDecoration: 'none' }}
                 >
-                  {label}
+                  <Typography sx={{ color: 'primary.textLight', fontWeight: 500 }}>
+                    {label}
+                  </Typography>
                 </Link>
               </Box>
             ))}
           </Box>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Typography variant="body2" sx={{ color: 'primary.textLight' }}>
-            {userEmail}
-          </Typography>
           <CustomButton
             onClick={logout}
           >
@@ -112,7 +110,7 @@ const Header = () => {
             {userEmail}
           </Typography>
         </Box>
-        <Divider />
+      
         <Box sx={{display: 'flex', flexDirection: 'column', height: '100%',justifyContent: 'space-between' }}>
 
         <List sx={{ p: 0 }}>
@@ -134,21 +132,20 @@ const Header = () => {
         </List>
         <Box>
 
-        <Divider />
-        <Box sx={{ p: 2, backgroundColor: 'primary.lightMain' }}>
-          <Button
+      
+        <Box sx={{ p: 2, width:"100%", }}>
+          <CustomButton
+          startIcon={
+            <LogoutIcon />
+          }
+          sx={{width:"100%"}}
             onClick={() => {
               logout();
               setDrawerOpen(false);
             }}
-            sx={{
-              width: '100%',
-              backgroundColor: 'primary.lightMain',
-              color: 'primary.textLight',
-            }}
             >
             Logout
-          </Button>
+          </CustomButton>
               </Box>
             </Box>
         </Box>
