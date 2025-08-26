@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import LoginPage from './pages/LoginPage';
 import TasksPage from './pages/TasksPage';
 import UsersPage from './pages/UsersPage';
@@ -7,19 +7,9 @@ import OAuth2RedirectHandler from './pages/OAuth2RedirectHandler';
 import { AuthProvider } from './Context/AuthContext';
 import Profile from './pages/Profile';
 import Layout from './Components/Layout';
+import { theme } from './theme/theme';
  
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#004030',
-      lightMain: '#4A9782',
-      textLight:"#FFFFFF"
-    },
-    secondary: {
-      main: '#f50057',
-    },
-  },
-});
+
 
 function App() {
   return (

@@ -55,11 +55,11 @@ const UsersPage = () => {
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Username</TableCell>
-              <TableCell>Role</TableCell>
-              <TableCell>Actions</TableCell>
+            <TableRow sx={{backgroundColor: 'primary.main'}}>
+              <TableCell sx={{ fontWeight: 'bold',color:"#fff" }}>ID</TableCell>
+              <TableCell sx={{ fontWeight: 'bold',color:"#fff" }}>Username</TableCell>
+              <TableCell sx={{ fontWeight: 'bold',color:"#fff" }}>Role</TableCell>
+              <TableCell sx={{ fontWeight: 'bold',color:"#fff" }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
