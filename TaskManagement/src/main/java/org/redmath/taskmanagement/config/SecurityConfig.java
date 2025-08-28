@@ -78,7 +78,13 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/", "/api/public/**", "/api/csrf", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/login/oauth2/**", "/oauth2/**").permitAll().requestMatchers(HttpMethod.OPTIONS, "/**").permitAll().anyRequest().authenticated()).oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.decoder(jwtDecoder()).jwtAuthenticationConverter(jwtAuthenticationConverter()))).oauth2Login(oauth2 -> oauth2.userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService)).successHandler((request, response, authentication) -> {
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/", "/api/public/**", "/api/csrf",
+                                "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/login/oauth2/**",
+                                "/oauth2/**").permitAll().requestMatchers(HttpMethod.OPTIONS, "/**")
+                        .permitAll().anyRequest().authenticated())
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.decoder(jwtDecoder()).jwtAuthenticationConverter(jwtAuthenticationConverter())))
+                .oauth2Login(oauth2 -> oauth2.userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                        .successHandler((request, response, authentication) -> {
                     String redirectUrl = generateJwtAndRedirect(authentication, jwtEncoder, userRepo);
                     response.sendRedirect(redirectUrl);
                 })
@@ -96,7 +102,12 @@ public class SecurityConfig {
 
         Users user = userRepo.findByUsername(email).orElseThrow(() -> new RuntimeException("User not found"));
 
-        JwtClaimsSet claims = JwtClaimsSet.builder().subject(authentication.getName()).issuedAt(Instant.now()).expiresAt(Instant.now().plusSeconds(expirySeconds)).claim("userId", user.getUserId()).claim("picture", oAuth2User.getAttribute("picture")).claim("roles", authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList()).build();
+        JwtClaimsSet claims = JwtClaimsSet.builder().subject(authentication.getName()).
+                issuedAt(Instant.now()).expiresAt(Instant.now().plusSeconds(expirySeconds)).
+                claim("userId", user.getUserId()).
+                claim("picture", oAuth2User.getAttribute("picture")).
+                claim("roles", authentication.getAuthorities().
+                        stream().map(GrantedAuthority::getAuthority).toList()).build();
 
         var jwsHeader = JwsHeader.with(MacAlgorithm.HS256).build();
         String token = jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
