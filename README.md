@@ -24,6 +24,7 @@ A full stack task management application that allows users to:
 - Spring Security
 - JPA/Hibernate
 - JWT Authentication
+- OAuth2 for login
 
 **Frontend:**
 - React  
