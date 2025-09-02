@@ -8,6 +8,7 @@ import { AuthProvider } from './Context/AuthContext';
 import Profile from './pages/Profile';
 import Layout from './Components/Layout';
 import { theme } from './theme/theme';
+import ChatPage from './pages/ChatPage';
  
 
 
@@ -25,6 +26,7 @@ function App() {
               <Route path="/profile" element={<Profile />}/>
               <Route path="/tasks" element={<TasksPage />} />
               <Route path="/users" element={<UsersPage />} />
+              <Route path="/chat" element={<ChatPage />} />
               <Route path="*" element={<LoginPage />} />
             </Routes>
           </Layout>

@@ -28,7 +28,8 @@ export const deleteTask = async (id) => api.delete(`/task/${id}`);
 
 export const getUsers = async () => (await api.get("/user")).data;
 export const deleteUser = async (id) => api.delete(`/user/${id}`);
+export const getSimpleResponse =async (prompt) => (await api.post("/gemini/simple-response", { prompt })).data;
 
-export const getSelf = async () => (await api.get("/user/profile")).data;
+export const getSelf = async (prompt) => (await api.get("/user/profile", { params: { prompt } })).data;
 export const createUser =async (userData) => (await api.post("/user", userData)).data;
 export default api;

@@ -93,8 +93,9 @@
 
         <dependency>
             <groupId>org.springframework.ai</groupId>
-            <artifactId>spring-ai-starter-model-vertex-ai-gemini</artifactId>
+            <artifactId>spring-ai-starter-model-openai</artifactId>
         </dependency>
+
     </dependencies>
 
     <dependencyManagement>
@@ -115,6 +116,11 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <environmentVariables>
+                        <GOOGLE_APPLICATION_CREDENTIALS>C:\keys\taskmanager-sa.json</GOOGLE_APPLICATION_CREDENTIALS>
+                    </environmentVariables>
+                </configuration>
             </plugin>
 
 

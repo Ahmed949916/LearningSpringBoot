@@ -30,7 +30,8 @@ const Header = () => {
   const navLinks = [
     { to: '/tasks', label: 'Tasks', show: true },
     { to: '/users', label: 'Users', show: userRole === 'ADMIN' },
-    { to: '/profile', label: 'Profile', show: true }
+    { to: '/profile', label: 'Profile', show: true },
+    { to: '/chat', label: 'Chat', show: true }
   ].filter(i => i.show);
 
   return (
