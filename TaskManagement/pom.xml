@@ -116,11 +116,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <environmentVariables>
-                        <GOOGLE_APPLICATION_CREDENTIALS>C:\keys\taskmanager-sa.json</GOOGLE_APPLICATION_CREDENTIALS>
-                    </environmentVariables>
-                </configuration>
+
             </plugin>
 
 
